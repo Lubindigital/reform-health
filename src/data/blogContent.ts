@@ -7,6 +7,7 @@ interface BlogPostContent {
   author: string;
   authorRole: string;
   excerpt: string;
+  image: string;
   ctaTitle: string;
   ctaDescription: string;
   htmlContent: string;
@@ -22,6 +23,7 @@ export const blogPostContent: Record<string, BlogPostContent> = {
     author: "Michael Lubin",
     authorRole: "Founder",
     excerpt: "A proclamation for Nevada employers — the case for High Performing Health Plans and a detailed roadmap for redirecting billions in healthcare waste.",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=450&fit=crop&q=80",
     ctaTitle: "Ready to join the movement?",
     ctaDescription: "Learn how your organization can be part of the ReForm Health Alliance.",
     htmlContent: `
@@ -84,6 +86,7 @@ export const blogPostContent: Record<string, BlogPostContent> = {
     author: "Michael Lubin",
     authorRole: "Founder",
     excerpt: "How hospital pricing really works, why it matters for employers, and what you can do to stop overpaying for employee healthcare.",
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=450&fit=crop&q=80",
     ctaTitle: "Ready to take control of your healthcare costs?",
     ctaDescription: "Join the growing coalition of Nevada employers demanding better.",
     htmlContent: `

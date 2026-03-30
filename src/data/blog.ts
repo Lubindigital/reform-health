@@ -7,6 +7,7 @@ export interface BlogPost {
   excerpt: string;
   author: string;
   authorRole: string;
+  image: string;
 }
 
 export const blogPosts: BlogPost[] = [
@@ -19,6 +20,7 @@ export const blogPosts: BlogPost[] = [
     excerpt: "A proclamation for Nevada employers — the case for High Performing Health Plans and a detailed roadmap for redirecting billions in healthcare waste.",
     author: "Michael Lubin",
     authorRole: "Founder",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=450&fit=crop&q=80",
   },
   {
     slug: "pricing-myths",
@@ -29,5 +31,6 @@ export const blogPosts: BlogPost[] = [
     excerpt: "How hospital pricing really works, why it matters for employers, and what you can do to stop overpaying for employee healthcare.",
     author: "Michael Lubin",
     authorRole: "Founder",
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=450&fit=crop&q=80",
   },
 ];

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 import { sanityFetch, BLOG_POST_QUERY, BLOG_POSTS_QUERY } from "@/sanity/client";
@@ -124,7 +125,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
             <h1 className="font-heading text-4xl md:text-[2.8rem] font-bold text-gray-900 leading-tight tracking-tight mb-3">{title}</h1>
             {subtitle && <p className="text-xl text-gray-500 mb-4">{subtitle}</p>}
-            <p className="text-sm text-gray-400 mb-6">By <strong className="text-gray-700">{author}</strong>, {authorRole}</p>
+            <p className="text-sm text-gray-400 mb-8">By <strong className="text-gray-700">{author}</strong>, {authorRole}</p>
+
+            {(fallback?.image) && (
+              <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
+                <Image
+                  src={fallback.image}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
 
             <ShareButtons title={title} />
 

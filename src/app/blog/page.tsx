@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FadeUp } from "@/components/motion/FadeUp";
@@ -63,17 +64,29 @@ export default async function BlogPage() {
                 <FadeUp key={post.slug} delay={i * 0.1}>
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="block bg-white p-8 rounded-2xl border border-gray-100 hover:border-navy/20 hover:shadow-[0_4px_12px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all cursor-pointer group"
+                    className="block bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-navy/20 hover:shadow-[0_4px_12px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all cursor-pointer group"
                   >
-                    <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
-                      <span className="bg-navy/[0.06] text-navy font-bold uppercase tracking-wide px-2.5 py-1 rounded">{post.category}</span>
-                      <span>{post.date} &middot; {post.readTime}</span>
-                    </div>
-                    <h3 className="font-heading text-xl font-bold text-gray-900 mb-2.5 group-hover:text-navy transition-colors">{post.title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-4">{post.excerpt}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">By {post.author}</span>
-                      <span className="text-navy text-sm font-semibold">Read More &rarr;</span>
+                    {"image" in post && (
+                      <div className="relative h-52 overflow-hidden">
+                        <Image
+                          src={String(post.image)}
+                          alt={post.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    <div className="p-8">
+                      <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
+                        <span className="bg-navy/[0.06] text-navy font-bold uppercase tracking-wide px-2.5 py-1 rounded">{post.category}</span>
+                        <span>{post.date} &middot; {post.readTime}</span>
+                      </div>
+                      <h3 className="font-heading text-xl font-bold text-gray-900 mb-2.5 group-hover:text-navy transition-colors">{post.title}</h3>
+                      <p className="text-gray-500 text-sm leading-relaxed mb-4">{post.excerpt}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-400">By {post.author}</span>
+                        <span className="text-navy text-sm font-semibold">Read More &rarr;</span>
+                      </div>
                     </div>
                   </Link>
                 </FadeUp>
