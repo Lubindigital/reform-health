@@ -1,4 +1,5 @@
 import { createClient, type SanityClient } from "next-sanity";
+import { apiVersion } from "./env";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
@@ -11,7 +12,7 @@ function getClient(): SanityClient | null {
     _client = createClient({
       projectId,
       dataset,
-      apiVersion: "2024-01-01",
+      apiVersion,
       useCdn: true,
     });
   }
