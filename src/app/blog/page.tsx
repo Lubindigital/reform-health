@@ -3,14 +3,48 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FadeUp } from "@/components/motion/FadeUp";
-import { blogPosts } from "@/data/blog";
+import { client, BLOG_POSTS_QUERY } from "@/sanity/client";
+import { blogPosts as fallbackPosts } from "@/data/blog";
 
 export const metadata: Metadata = {
   title: "Insights | ReForm Health Alliance",
   description: "Insights, analysis, and thought leadership from the ReForm Health Alliance on employer healthcare strategy in Nevada.",
 };
 
-export default function BlogPage() {
+interface SanityPost {
+  _id: string;
+  title: string;
+  slug: string;
+  category: string;
+  author: string;
+  publishedAt: string;
+  readTime: string;
+  excerpt: string;
+}
+
+async function getPosts() {
+  try {
+    const posts: SanityPost[] = await client.fetch(BLOG_POSTS_QUERY);
+    if (posts && posts.length > 0) {
+      return posts.map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        category: p.category,
+        date: new Date(p.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        readTime: p.readTime,
+        excerpt: p.excerpt,
+        author: p.author,
+      }));
+    }
+  } catch {
+    // Sanity not configured yet
+  }
+  return fallbackPosts;
+}
+
+export default async function BlogPage() {
+  const posts = await getPosts();
+
   return (
     <>
       <Navbar />
@@ -25,7 +59,7 @@ export default function BlogPage() {
         <section className="py-20 bg-off-white">
           <div className="max-w-[1120px] mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {blogPosts.map((post, i) => (
+              {posts.map((post, i) => (
                 <FadeUp key={post.slug} delay={i * 0.1}>
                   <Link
                     href={`/blog/${post.slug}`}

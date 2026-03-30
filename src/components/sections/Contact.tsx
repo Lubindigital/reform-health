@@ -1,11 +1,43 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { Phone, MapPin } from "lucide-react";
-import { CONTACT, FORMSPREE_ACTION } from "@/lib/constants";
+import { CONTACT } from "@/lib/constants";
 import { FadeUp } from "@/components/motion/FadeUp";
 
 export function Contact() {
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        router.push("/thank-you");
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-24 bg-white">
       <div className="max-w-[1120px] mx-auto px-6">
@@ -55,7 +87,7 @@ export function Contact() {
             transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="bg-off-white border border-gray-100 rounded-2xl p-9"
           >
-            <form action={FORMSPREE_ACTION} method="POST">
+            <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <input type="text" name="name" required placeholder="Full Name" className="w-full px-3.5 py-3 text-sm border border-gray-200 rounded-lg bg-white text-gray-800 focus:outline-none focus:border-navy focus:ring-2 focus:ring-navy/10 transition-all" />
                 <input type="text" name="company" required placeholder="Organization" className="w-full px-3.5 py-3 text-sm border border-gray-200 rounded-lg bg-white text-gray-800 focus:outline-none focus:border-navy focus:ring-2 focus:ring-navy/10 transition-all" />
@@ -72,8 +104,12 @@ export function Contact() {
                 <option value="other">Other / General Inquiry</option>
               </select>
               <textarea name="message" rows={4} placeholder="Tell us about your organization and interest in the alliance..." className="w-full px-3.5 py-3 text-sm border border-gray-200 rounded-lg bg-white text-gray-800 focus:outline-none focus:border-navy focus:ring-2 focus:ring-navy/10 transition-all resize-y min-h-[100px] mb-5" />
-              <button type="submit" className="w-full bg-navy text-white py-3.5 rounded-lg text-sm font-semibold hover:bg-navy-deep transition-colors cursor-pointer">
-                Submit
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-navy text-white py-3.5 rounded-lg text-sm font-semibold hover:bg-navy-deep transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {submitting ? "Submitting..." : "Submit"}
               </button>
             </form>
           </motion.div>
