@@ -32,7 +32,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="h-12 mb-6 overflow-hidden"
+          className="h-8 mb-6 overflow-hidden relative"
         >
           <AnimatePresence mode="wait">
             <motion.span
@@ -41,7 +41,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="block font-heading text-xl md:text-2xl font-semibold text-navy-light"
+              className="block font-heading text-sm md:text-base font-semibold text-navy-light uppercase tracking-[2px]"
             >
               {rotatingWords[wordIndex]}
             </motion.span>
