@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FadeUp } from "@/components/motion/FadeUp";
-import { client, BLOG_POSTS_QUERY } from "@/sanity/client";
+import { sanityFetch, BLOG_POSTS_QUERY } from "@/sanity/client";
 import { blogPosts as fallbackPosts } from "@/data/blog";
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ interface SanityPost {
 
 async function getPosts() {
   try {
-    const posts: SanityPost[] = await client.fetch(BLOG_POSTS_QUERY);
+    const posts = await sanityFetch<SanityPost[]>(BLOG_POSTS_QUERY);
     if (posts && posts.length > 0) {
       return posts.map((p) => ({
         slug: p.slug,

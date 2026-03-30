@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
-import { client, BLOG_POST_QUERY, BLOG_POSTS_QUERY } from "@/sanity/client";
+import { sanityFetch, BLOG_POST_QUERY, BLOG_POSTS_QUERY } from "@/sanity/client";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ShareButtons } from "@/components/shared/ShareButtons";
@@ -26,7 +26,7 @@ interface BlogPost {
 
 export async function generateStaticParams() {
   try {
-    const posts: BlogPost[] = await client.fetch(BLOG_POSTS_QUERY);
+    const posts = await sanityFetch<BlogPost[]>(BLOG_POSTS_QUERY);
     if (posts && posts.length > 0) {
       return posts.map((post) => ({ slug: post.slug }));
     }
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   // Try Sanity first
   try {
-    const post: BlogPost | null = await client.fetch(BLOG_POST_QUERY, { slug });
+    const post = await sanityFetch<BlogPost>(BLOG_POST_QUERY, { slug });
     if (post) {
       return {
         title: `${post.title} | ReForm Health Alliance`,
@@ -90,7 +90,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // Try Sanity first
   let post: BlogPost | null = null;
   try {
-    post = await client.fetch(BLOG_POST_QUERY, { slug });
+    post = await sanityFetch<BlogPost>(BLOG_POST_QUERY, { slug });
   } catch {
     // Sanity not configured
   }
