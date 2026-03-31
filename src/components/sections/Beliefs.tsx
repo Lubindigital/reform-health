@@ -9,7 +9,10 @@ export function Beliefs() {
   return (
     <section id="beliefs" className="py-24 bg-white">
       <div className="max-w-[1120px] mx-auto px-6">
-        <SectionHeader tag="Our Beliefs" title="The Principles That Drive Our Mission" />
+        <div className="text-center max-w-[600px] mx-auto mb-16">
+          <span className="inline-block text-sm font-bold uppercase tracking-[3px] text-navy mb-3.5">Our Beliefs</span>
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-[2.4rem] font-bold leading-tight tracking-tight text-gray-900">The Principles That Drive Our Mission</h2>
+        </div>
 
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {beliefs.map((belief) => (

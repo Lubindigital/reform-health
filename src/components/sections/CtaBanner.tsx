@@ -27,7 +27,7 @@ export function CtaBanner() {
           <div className="relative z-10">
             <FadeUp>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-                Ready to Take Control of Your Healthcare Costs?
+                Ready to transform your health into a valuable strategic asset?
               </h2>
             </FadeUp>
             <FadeUp delay={0.15}>
@@ -43,7 +43,7 @@ export function CtaBanner() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="inline-block bg-navy-light hover:bg-navy text-white px-9 py-4 rounded-lg text-base font-semibold transition-colors cursor-pointer"
               >
-                Join the Alliance
+                Join ReForm
               </motion.a>
             </FadeUp>
           </div>

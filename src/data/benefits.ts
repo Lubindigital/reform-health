@@ -6,7 +6,7 @@ export interface Benefit {
 export const benefits: Benefit[] = [
   {
     title: "Employer-Driven Governance",
-    description: "Members shape the direction of the alliance. Your voice, your priorities, your outcomes.",
+    description: "Members shape the ReForm direction. Your voice, your priorities, your outcomes.",
   },
   {
     title: "Healthcare Expertise On Demand",
@@ -14,7 +14,7 @@ export const benefits: Benefit[] = [
   },
   {
     title: "Exclusive Provider Network",
-    description: "Direct relationships with high-performing independent providers — better care, lower costs.",
+    description: "Direct relationships with outcomes focused independent providers — better access and care, lower costs.",
   },
   {
     title: "Transformative Data & Analytics",
@@ -22,6 +22,6 @@ export const benefits: Benefit[] = [
   },
   {
     title: "Benefit Plan Innovation",
-    description: "Cutting-edge plan designs that reduce waste and improve employee health outcomes.",
+    description: "High Performing Health Plans that align incentives, eliminate waste and improve health outcomes.",
   },
 ];

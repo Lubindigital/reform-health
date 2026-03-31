@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 
-const rotatingWords = ["Better Care", "Lower Costs", "Stronger Communities"];
+const rotatingWords = ["Better Outcomes", "Lower Costs", "Stronger Communities"];
 
 export function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
@@ -32,7 +32,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="h-8 mb-6 overflow-hidden relative"
+          className="h-10 mb-6 overflow-hidden relative"
         >
           <AnimatePresence mode="wait">
             <motion.span
@@ -41,7 +41,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="block font-heading text-sm md:text-base font-semibold text-navy-light uppercase tracking-[2px]"
+              className="block font-heading text-lg md:text-xl font-semibold text-navy-light uppercase tracking-[2px]"
             >
               {rotatingWords[wordIndex]}
             </motion.span>
@@ -73,10 +73,10 @@ export function Hero() {
           className="flex flex-col sm:flex-row gap-3.5"
         >
           <a href="#contact" className="bg-navy-light hover:bg-navy text-white px-8 py-3.5 rounded-lg text-sm font-semibold text-center transition-colors cursor-pointer">
-            Join the Alliance
+            Join ReForm
           </a>
-          <a href="#about" className="border border-white/25 text-white/90 px-8 py-3.5 rounded-lg text-sm font-semibold text-center hover:bg-white/10 transition-all backdrop-blur-sm cursor-pointer">
-            Learn More
+          <a href="#northstar" className="border border-white/25 text-white/90 px-8 py-3.5 rounded-lg text-sm font-semibold text-center hover:bg-white/10 transition-all backdrop-blur-sm cursor-pointer">
+            Our Goal
           </a>
         </motion.div>
       </div>

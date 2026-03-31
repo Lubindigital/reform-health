@@ -17,27 +17,27 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/98 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] py-2" : "bg-white/90 backdrop-blur-sm py-3.5"}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] py-2" : "bg-transparent py-3.5"}`}>
       <div className="max-w-[1120px] mx-auto px-6 flex items-center justify-between">
         <Link href="/" className="block">
-          <Image src="/logo.png" alt="ReForm Health Alliance" width={160} height={44} className="h-[44px] w-auto" priority />
+          <Image src="/logo-transparent.svg" alt="ReForm Health Alliance" width={180} height={50} className="h-[50px] w-auto" priority />
         </Link>
 
         <div className="hidden lg:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className="text-sm font-medium text-gray-500 hover:text-navy transition-colors">
+            <Link key={link.href} href={link.href} className={`text-sm font-medium transition-colors ${scrolled ? "text-gray-500 hover:text-navy" : "text-white/80 hover:text-white"}`}>
               {link.label}
             </Link>
           ))}
           <Link href="/#contact" className="bg-navy text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-navy-deep transition-colors">
-            Join the Alliance
+            Join ReForm
           </Link>
         </div>
 
         <button className="lg:hidden flex flex-col gap-[5px] p-1.5 cursor-pointer" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-          <motion.span animate={menuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }} className="block w-6 h-0.5 bg-gray-700" />
-          <motion.span animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} className="block w-6 h-0.5 bg-gray-700" />
-          <motion.span animate={menuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }} className="block w-6 h-0.5 bg-gray-700" />
+          <motion.span animate={menuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }} className={`block w-6 h-0.5 ${scrolled ? "bg-gray-700" : "bg-white"}`} />
+          <motion.span animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} className={`block w-6 h-0.5 ${scrolled ? "bg-gray-700" : "bg-white"}`} />
+          <motion.span animate={menuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }} className={`block w-6 h-0.5 ${scrolled ? "bg-gray-700" : "bg-white"}`} />
         </button>
       </div>
 
@@ -56,7 +56,7 @@ export function Navbar() {
                 ))}
                 <li className="mt-4">
                   <Link href="/#contact" onClick={() => setMenuOpen(false)} className="block bg-navy text-white text-center py-3.5 px-5 rounded-lg font-semibold">
-                    Join the Alliance
+                    Join ReForm
                   </Link>
                 </li>
               </ul>

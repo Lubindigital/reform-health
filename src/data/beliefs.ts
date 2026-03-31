@@ -13,12 +13,12 @@ export const beliefs: Belief[] = [
   {
     number: "02",
     title: "40% of Spending Is Waste",
-    description: "Nearly half of what employers pay in premiums goes to administrative bloat, inflated pricing, and unnecessary procedures — not to actual patient care.",
+    description: "Nearly half of what employers pay in premiums goes to opaque administrative bloat, inflated pricing, and unnecessary procedures — not to actual patient care. We want that eliminated and returned to Nevada employers.",
   },
   {
     number: "03",
     title: "Outcomes Over Volume",
-    description: "Healthcare should be measured by patient outcomes, not the number of procedures performed. We advocate for value-based care models that reward quality.",
+    description: "The most impactful way to reduce healthcare costs is ensuring patients receive the right care from the right provider at the right time. Patients need help to achieve that. We ensure it does.",
   },
   {
     number: "04",
@@ -28,6 +28,6 @@ export const beliefs: Belief[] = [
   {
     number: "05",
     title: "Collective Action Works",
-    description: "One employer can be ignored. Hundreds cannot. By forming a unified alliance, Nevada employers gain the negotiating power to demand real change.",
+    description: "One employer can be ignored. Hundreds cannot. By forming a unified coalition, Nevada employers gain the negotiating power to control their destiny.",
   },
 ];

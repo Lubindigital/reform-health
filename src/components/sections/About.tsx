@@ -11,7 +11,7 @@ export function About() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div>
             <FadeUp>
-              <span className="tag">About the Alliance</span>
+              <span className="tag">About ReForm</span>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-6">
                 Reimagining Healthcare Through the Power of Partnership
               </h2>
@@ -52,13 +52,10 @@ export function About() {
             className="space-y-5"
           >
             <p className="text-gray-600 leading-relaxed">
-              ReForm Health Alliance is more than a coalition — it&apos;s a movement. We bring together Nevada&apos;s employers to collectively negotiate, implement, and manage <strong className="text-gray-900">High Performing Health Plans (HPHPs)</strong> that prioritize outcomes over volume and value over cost.
+              The ReForm Health Alliance is more than a coalition&mdash;it&apos;s a movement. We bring together employers and providers to implement <strong className="text-gray-900">High Performing Health Plans (HPHPs)</strong> that empower employers to control spending, improve access and outcomes, and transform health benefits from a liability into a valuable strategic asset.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              By uniting as a single purchasing force, we gain leverage that no single employer could achieve alone. The result: better healthcare for employees, lower costs for businesses, and stronger communities across Nevada.
-            </p>
-            <p className="text-gray-600 leading-relaxed">
-              Founded in Reno, NV, our alliance is built on the belief that the current system is broken — and that employers have both the power and the responsibility to fix it.
+              By aligning incentives, mandating transparency, and facilitating collaboration between providers and employers, we gain momentum and control that no single employer can achieve alone. The result: better healthcare for employees, sustainable and predictable costs for businesses, and stronger communities across Nevada.
             </p>
           </motion.div>
         </div>

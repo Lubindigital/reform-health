@@ -7,7 +7,7 @@ import { StaggerContainer, staggerItemVariants } from "@/components/motion/Stagg
 
 export function Kpis() {
   return (
-    <section className="py-24 bg-gradient-to-br from-[#0a193c] to-[#0f2350]">
+    <section id="northstar" className="py-24 bg-gradient-to-br from-[#0a193c] to-[#0f2350]">
       <div className="max-w-[1120px] mx-auto px-6">
         <SectionHeader tag="Our North Star" title="Measurable Goals. Accountable Results." light />
 

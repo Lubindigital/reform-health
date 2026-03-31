@@ -1,7 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { ImpactNumbers } from "@/components/sections/ImpactNumbers";
 import { About } from "@/components/sections/About";
 import { Beliefs } from "@/components/sections/Beliefs";
 import { Kpis } from "@/components/sections/Kpis";
@@ -17,10 +16,9 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <ImpactNumbers />
+        <Kpis />
         <About />
         <Beliefs />
-        <Kpis />
         <Initiatives />
         <Membership />
         <Insights />

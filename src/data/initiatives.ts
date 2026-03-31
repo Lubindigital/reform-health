@@ -8,7 +8,7 @@ export const initiatives: Initiative[] = [
   {
     icon: "Layers",
     title: "National Best Practices",
-    description: "We bring proven strategies from national healthcare experts and adapt them for Nevada's market.",
+    description: "Education to empower employers with proven strategies from national and local experts, putting them in control.",
   },
   {
     icon: "PieChart",
@@ -17,22 +17,22 @@ export const initiatives: Initiative[] = [
   },
   {
     icon: "Users",
-    title: "Independent Provider Alliance",
-    description: "Building direct relationships with high-quality independent providers who prioritize outcomes over volume.",
+    title: "Health Investment Network Access",
+    description: "We align with quality independent providers who prioritize access and outcomes over volume and ensure they have the support they need to succeed.",
   },
   {
     icon: "CircleCheck",
     title: "Certified Benefit Consultants",
-    description: "A vetted network of benefit consultants aligned with our mission — advisors who work for you, not the insurance carriers.",
+    description: "Vetted advisors with aligned incentives who can implement and support HPHPs to transition legacy plans from 'unavoidable expense' to 'strategic asset'",
   },
   {
     icon: "Shield",
     title: "Proven Solution Partners",
-    description: "Partnerships with organizations that have a track record of delivering measurable healthcare cost reductions.",
+    description: "Partnerships with HPHP innovators and experts who have a track record of delivering measurable healthcare cost and outcome transformation.",
   },
   {
     icon: "Heart",
     title: "Community Health Impact",
-    description: "Improving health outcomes and community prosperity by putting healthcare dollars where they belong — in patient care.",
+    description: "Improve health outcomes and community prosperity by eliminating waste and investing in better access and care.",
   },
 ];

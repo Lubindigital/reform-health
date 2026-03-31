@@ -53,7 +53,7 @@ export function Contact() {
               Join the Alliance
             </h2>
             <p className="text-gray-500 leading-relaxed mb-9">
-              Whether you&apos;re a large employer, a small business, or a benefit consultant — we want to hear from you. Together, we&apos;re stronger.
+              Whether you&apos;re a large employer, a small business, an independent provider or benefits consultant&mdash; we want to hear from you. Together, we&apos;re stronger.
             </p>
 
             <div className="flex flex-col gap-6">

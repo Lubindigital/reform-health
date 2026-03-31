@@ -21,8 +21,8 @@ export function Footer() {
       <div className="max-w-[1120px] mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_0.8fr_1fr] gap-12 pb-12 border-b border-white/[0.06]">
           <div>
-            <Image src="/logo.png" alt="ReForm Health Alliance" width={140} height={40} className="h-[40px] w-auto grayscale invert opacity-70" />
-            <p className="mt-4 text-sm leading-relaxed">A collective of leading Nevada organizations disrupting the health insurance status quo.</p>
+            <Image src="/logo-transparent.svg" alt="ReForm Health Alliance" width={160} height={45} className="h-[45px] w-auto brightness-0 invert opacity-80" />
+            <p className="mt-4 text-sm leading-relaxed">A collective of leading Nevada organizations driving economic and community health transformation.</p>
             <div className="flex gap-3 mt-5">
               {SOCIAL_LINKS.map((link) => {
                 return (
