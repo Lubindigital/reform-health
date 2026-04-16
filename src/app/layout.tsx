@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Instrument_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import ChatWidget from "@/components/chat/ChatWidget";
 import "./globals.css";
 
@@ -61,6 +62,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col font-sans">
         {children}
+        <Analytics />
         <ChatWidget />
       </body>
     </html>
