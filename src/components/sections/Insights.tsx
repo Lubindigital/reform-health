@@ -8,7 +8,7 @@ export function Insights() {
   return (
     <section id="insights" className="py-24 bg-off-white">
       <div className="max-w-[1120px] mx-auto px-6">
-        <SectionHeader tag="Insights" title="From the Alliance" />
+        <SectionHeader tag="From ReForm" title="From the Alliance" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {blogPosts.map((post, i) => (

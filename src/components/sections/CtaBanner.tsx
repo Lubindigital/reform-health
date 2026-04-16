@@ -27,7 +27,7 @@ export function CtaBanner() {
           <div className="relative z-10">
             <FadeUp>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-                Ready to transform your health into a valuable strategic asset?
+                Ready to transform your health benefits into a valuable strategic asset?
               </h2>
             </FadeUp>
             <FadeUp delay={0.15}>

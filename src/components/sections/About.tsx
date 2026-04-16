@@ -52,7 +52,7 @@ export function About() {
             className="space-y-5"
           >
             <p className="text-gray-600 leading-relaxed">
-              The ReForm Health Alliance is more than a coalition&mdash;it&apos;s a movement. We bring together employers and providers to implement <strong className="text-gray-900">High Performing Health Plans (HPHPs)</strong> that empower employers to control spending, improve access and outcomes, and transform health benefits from a liability into a valuable strategic asset.
+              The ReForm Health Alliance is more than a coalition&mdash;it&apos;s a movement. We bring together employers and providers to implement <strong className="text-gray-900">High Performing Health Plans (HPHPs)</strong> that empower employers and providers to control spending, improve access and outcomes, and transform health benefits from &apos;liability&apos; to &apos;strategic asset&apos;.
             </p>
             <p className="text-gray-600 leading-relaxed">
               By aligning incentives, mandating transparency, and facilitating collaboration between providers and employers, we gain momentum and control that no single employer can achieve alone. The result: better healthcare for employees, sustainable and predictable costs for businesses, and stronger communities across Nevada.

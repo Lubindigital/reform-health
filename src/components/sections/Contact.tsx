@@ -48,9 +48,9 @@ export function Contact() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="tag">Get Involved</span>
+            <span className="tag">Join ReForm</span>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-              Join the Alliance
+              Join ReForm
             </h2>
             <p className="text-gray-500 leading-relaxed mb-9">
               Whether you&apos;re a large employer, a small business, an independent provider or benefits consultant&mdash; we want to hear from you. Together, we&apos;re stronger.

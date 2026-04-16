@@ -17,7 +17,7 @@ export const kpis: Kpi[] = [
   },
   {
     value: "100%",
-    label: "Employee DPC Access",
+    label: "Same Day Access",
     description: "Ensure every plan member has access to advanced, independent primary care.",
   },
 ];

@@ -32,7 +32,7 @@ export const initiatives: Initiative[] = [
   },
   {
     icon: "Heart",
-    title: "Community Health Impact",
-    description: "Improve health outcomes and community prosperity by eliminating waste and investing in better access and care.",
+    title: "Impact Measurement",
+    description: "We measure, track and celebrate our progress to ensure our efforts are making a tangible and positive impact on our stakeholders and the communities we serve.",
   },
 ];

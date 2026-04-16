@@ -30,4 +30,9 @@ export const beliefs: Belief[] = [
     title: "Collective Action Works",
     description: "One employer can be ignored. Hundreds cannot. By forming a unified coalition, Nevada employers gain the negotiating power to control their destiny.",
   },
+  {
+    number: "06",
+    title: "Collaboration is Key",
+    description: "Healthcare has become intensely siloed. Cross provider collaboration and provider-employer collaboration dramatically improves the outcomes we want to see.",
+  },
 ];

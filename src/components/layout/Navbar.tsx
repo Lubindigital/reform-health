@@ -20,7 +20,7 @@ export function Navbar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] py-2" : "bg-transparent py-3.5"}`}>
       <div className="max-w-[1120px] mx-auto px-6 flex items-center justify-between">
         <Link href="/" className="block">
-          <Image src="/logo-transparent.svg" alt="ReForm Health Alliance" width={180} height={50} className="h-[50px] w-auto" priority />
+          <Image src="/logo-transparent.svg" alt="ReForm Health Alliance" width={180} height={50} className={`h-[50px] w-auto transition-all duration-300 ${scrolled ? "" : "brightness-0 invert drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"}`} priority />
         </Link>
 
         <div className="hidden lg:flex items-center gap-8">

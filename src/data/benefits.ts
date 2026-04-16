@@ -13,7 +13,7 @@ export const benefits: Benefit[] = [
     description: "Access to national experts, independent analysts, and certified benefit consultants.",
   },
   {
-    title: "Exclusive Provider Network",
+    title: "Health Investment Network Access",
     description: "Direct relationships with outcomes focused independent providers — better access and care, lower costs.",
   },
   {

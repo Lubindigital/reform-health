@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Instrument_Sans } from "next/font/google";
+import ChatWidget from "@/components/chat/ChatWidget";
 import "./globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -58,7 +59,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        {children}
+        <ChatWidget />
+      </body>
     </html>
   );
 }

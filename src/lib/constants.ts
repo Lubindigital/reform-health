@@ -6,10 +6,10 @@ export const CONTACT = {
 
 export const NAV_LINKS = [
   { label: "About", href: "/#about" },
-  { label: "Beliefs", href: "/#beliefs" },
   { label: "Initiatives", href: "/#initiatives" },
   { label: "Membership", href: "/#membership" },
-  { label: "Insights", href: "/blog" },
+  { label: "Insights", href: "/#insights" },
+  { label: "News", href: "/blog" },
 ] as const;
 
 export const FORMSPREE_ACTION = "https://formspree.io/f/xkoprobn";

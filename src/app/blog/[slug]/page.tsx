@@ -155,7 +155,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <h3 className="font-heading text-xl font-bold text-gray-900 mb-2">{fallback?.ctaTitle || "Ready to join the movement?"}</h3>
               <p className="text-gray-500 text-sm mb-5">{fallback?.ctaDescription || "Learn how your organization can be part of the ReForm Health Alliance."}</p>
               <Link href="/#contact" className="inline-block bg-navy text-white px-8 py-3.5 rounded-lg text-sm font-semibold hover:bg-navy-deep transition-colors">
-                Join the Alliance
+                Join ReForm
               </Link>
             </div>
 
