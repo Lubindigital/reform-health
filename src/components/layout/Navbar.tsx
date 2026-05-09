@@ -24,11 +24,35 @@ export function Navbar() {
         </Link>
 
         <div className="hidden lg:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className={`text-sm font-medium transition-colors ${scrolled ? "text-gray-500 hover:text-navy" : "text-white/80 hover:text-white"}`}>
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const linkClasses = `text-sm font-medium transition-colors ${scrolled ? "text-gray-500 hover:text-navy" : "text-white/80 hover:text-white"}`;
+            if (link.children) {
+              return (
+                <div key={link.label} className="relative group">
+                  <button type="button" className={`${linkClasses} inline-flex items-center gap-1 cursor-pointer`} aria-haspopup="menu" aria-expanded="false">
+                    {link.label}
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true" className="transition-transform group-hover:rotate-180 group-focus-within:rotate-180">
+                      <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-150" role="menu">
+                    <div className="bg-white rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.10)] border border-gray-100 py-2 min-w-[180px]">
+                      {link.children.map((child) => (
+                        <Link key={child.href} href={child.href} role="menuitem" className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-navy hover:bg-gray-50 transition-colors">
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <Link key={link.href} href={link.href} className={linkClasses}>
+                {link.label}
+              </Link>
+            );
+          })}
           <Link href="/#contact" className="bg-navy text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-navy-deep transition-colors">
             Join ReForm
           </Link>
@@ -47,13 +71,33 @@ export function Navbar() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/20 z-40 lg:hidden" onClick={() => setMenuOpen(false)} />
             <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed top-0 right-0 w-[280px] h-screen bg-white z-50 shadow-xl pt-20 px-6 lg:hidden">
               <ul className="flex flex-col">
-                {NAV_LINKS.map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} onClick={() => setMenuOpen(false)} className="block py-3.5 text-gray-700 text-base font-medium border-b border-gray-100">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                {NAV_LINKS.map((link) => {
+                  if (link.children) {
+                    return (
+                      <li key={link.label}>
+                        <div className="py-3.5 text-gray-700 text-base font-medium border-b border-gray-100">
+                          {link.label}
+                        </div>
+                        <ul className="pl-4 border-b border-gray-100">
+                          {link.children.map((child) => (
+                            <li key={child.href}>
+                              <Link href={child.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-gray-600 text-sm font-medium">
+                                {child.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={link.href}>
+                      <Link href={link.href} onClick={() => setMenuOpen(false)} className="block py-3.5 text-gray-700 text-base font-medium border-b border-gray-100">
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                })}
                 <li className="mt-4">
                   <Link href="/#contact" onClick={() => setMenuOpen(false)} className="block bg-navy text-white text-center py-3.5 px-5 rounded-lg font-semibold">
                     Join ReForm
