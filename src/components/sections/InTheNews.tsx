@@ -36,8 +36,8 @@ const pressItems: PressItem[] = [
       "KOLO 8 reports on the new Reno-based partnership making it easier for Nevada employers to offer high-value, lower-cost benefits to their workforce.",
     cta: "Watch the segment",
     image:
-      "https://images.unsplash.com/photo-1490642914619-7955a3fd483c?w=1200&q=80&auto=format&fit=crop",
-    imageAlt: "Microphone in front of a news camera",
+      "https://images.unsplash.com/photo-1674242189651-f1989b8f7349?w=1200&q=80&auto=format&fit=crop",
+    imageAlt: "Downtown Reno, Nevada cityscape with the Truckee River and surrounding mountains",
   },
   {
     href: "https://nvhphp.health",
