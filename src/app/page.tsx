@@ -7,6 +7,7 @@ import { Kpis } from "@/components/sections/Kpis";
 import { Initiatives } from "@/components/sections/Initiatives";
 import { Membership } from "@/components/sections/Membership";
 import { Insights } from "@/components/sections/Insights";
+import { InTheNews } from "@/components/sections/InTheNews";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { Contact } from "@/components/sections/Contact";
 
@@ -22,6 +23,7 @@ export default function Home() {
         <Initiatives />
         <Membership />
         <Insights />
+        <InTheNews />
         <CtaBanner />
         <Contact />
       </main>
