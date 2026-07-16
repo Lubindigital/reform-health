@@ -6,10 +6,12 @@ import { motion } from "motion/react";
 import { Phone, MapPin } from "lucide-react";
 import { CONTACT } from "@/lib/constants";
 import { FadeUp } from "@/components/motion/FadeUp";
+import { Turnstile } from "@/components/shared/Turnstile";
 
 export function Contact() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [token, setToken] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,7 +25,7 @@ export function Contact() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, turnstileToken: token }),
       });
 
       if (res.ok) {
@@ -104,6 +106,12 @@ export function Contact() {
                 <option value="other">Other / General Inquiry</option>
               </select>
               <textarea name="message" rows={4} placeholder="Tell us about your organization and interest in the alliance..." className="w-full px-3.5 py-3 text-sm border border-gray-200 rounded-lg bg-white text-gray-800 focus:outline-none focus:border-navy focus:ring-2 focus:ring-navy/10 transition-all resize-y min-h-[100px] mb-5" />
+
+              {/* Honeypot: hidden from users, catches bots. */}
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+
+              <Turnstile onVerify={setToken} onExpire={() => setToken("")} className="mb-5" />
+
               <button
                 type="submit"
                 disabled={submitting}

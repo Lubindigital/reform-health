@@ -1,5 +1,6 @@
 import { beliefs } from "./beliefs";
 import { benefits } from "./benefits";
+import { events, formatEventDate } from "./events";
 import { initiatives } from "./initiatives";
 import { kpis } from "./kpis";
 import { CONTACT } from "@/lib/constants";
@@ -28,6 +29,15 @@ ${benefits.map((b) => `- ${b.title}: ${b.description}`).join("\n")}
 
 ## Key Performance Targets (North Star)
 ${kpis.map((k) => `- ${k.value} ${k.label}: ${k.description}`).join("\n")}
+
+## Events
+The alliance hosts webinars and live sessions for Nevada employers. The full calendar lives at https://www.reformnv.org/events
+${events
+  .map(
+    (e) =>
+      `- ${e.title} (${e.format}) — ${formatEventDate(e.startDate)}${e.timeLabel ? `, ${e.timeLabel}` : ""}, ${e.location}. ${e.description}${e.registrationUrl ? ` Sign up: ${e.registrationUrl}` : ""}`,
+  )
+  .join("\n")}
 
 ## Contact
 - Phone: ${CONTACT.phone}

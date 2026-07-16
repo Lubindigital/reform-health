@@ -4,12 +4,14 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { Turnstile } from "@/components/shared/Turnstile";
 
 const transport = new DefaultChatTransport({ api: "/api/chat" });
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [token, setToken] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { messages, sendMessage, status } = useChat({ transport });
@@ -62,6 +64,7 @@ export default function ChatWidget() {
                   Ask about our mission, membership, initiatives, or how we can
                   help your organization.
                 </p>
+                <Turnstile onVerify={setToken} onExpire={() => setToken("")} className="mt-2" />
               </div>
             )}
 
@@ -102,7 +105,7 @@ export default function ChatWidget() {
             onSubmit={(e) => {
               e.preventDefault();
               if (input.trim() && !isLoading) {
-                sendMessage({ text: input });
+                sendMessage({ text: input }, { body: { turnstileToken: token } });
                 setInput("");
               }
             }}

@@ -3,6 +3,7 @@ import { Space_Grotesk, Instrument_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import ChatWidget from "@/components/chat/ChatWidget";
+import { ThirdPartyAnalytics } from "@/components/analytics/ThirdPartyAnalytics";
 import "./globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -65,6 +66,7 @@ export default function RootLayout({
         {children}
         <Analytics />
         <SpeedInsights />
+        <ThirdPartyAnalytics />
         <ChatWidget />
       </body>
     </html>

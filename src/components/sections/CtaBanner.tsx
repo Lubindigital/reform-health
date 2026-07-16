@@ -4,7 +4,16 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { FadeUp } from "@/components/motion/FadeUp";
 
-export function CtaBanner() {
+const DEFAULT_HEADLINE = "Ready to transform your health benefits into a valuable strategic asset?";
+const DEFAULT_DESCRIPTION =
+  "Join the growing coalition of Nevada employers who are demanding better. The status quo ends when we act together.";
+
+export interface CtaBannerProps {
+  headline?: string;
+  description?: string;
+}
+
+export function CtaBanner({ headline, description }: CtaBannerProps = {}) {
   return (
     <section className="py-20">
       <div className="max-w-[1120px] mx-auto px-6">
@@ -27,12 +36,12 @@ export function CtaBanner() {
           <div className="relative z-10">
             <FadeUp>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
-                Ready to transform your health benefits into a valuable strategic asset?
+                {headline || DEFAULT_HEADLINE}
               </h2>
             </FadeUp>
             <FadeUp delay={0.15}>
               <p className="text-white/60 text-lg mb-8 max-w-[520px] mx-auto">
-                Join the growing coalition of Nevada employers who are demanding better. The status quo ends when we act together.
+                {description || DEFAULT_DESCRIPTION}
               </p>
             </FadeUp>
             <FadeUp delay={0.3}>

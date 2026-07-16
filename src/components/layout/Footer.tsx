@@ -52,6 +52,7 @@ export function Footer() {
             <h4 className="text-white text-xs font-bold uppercase tracking-[2px] mb-5">Resources</h4>
             <ul className="space-y-2.5">
               <li><Link href="/blog" className="text-sm hover:text-navy-light transition-colors">Insights</Link></li>
+              <li><Link href="/events" className="text-sm hover:text-navy-light transition-colors">Events</Link></li>
               <li><Link href="/#contact" className="text-sm hover:text-navy-light transition-colors">Contact</Link></li>
             </ul>
           </div>

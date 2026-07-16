@@ -4,17 +4,32 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 
-const rotatingWords = ["Better Outcomes", "Lower Costs", "Stronger Communities"];
+const DEFAULT_HEADLINE = "Disrupting the Healthcare Status Quo for Nevada Employers";
+const DEFAULT_DESCRIPTION =
+  "The ReForm Health Alliance is a collective of leading Nevada organizations working together to deliver better employee healthcare benefits at sustainably lower costs — redirecting billions back to our communities.";
+const DEFAULT_ROTATING_WORDS = ["Better Outcomes", "Lower Costs", "Stronger Communities"];
 
-export function Hero() {
+export interface HeroProps {
+  headline?: string;
+  description?: string;
+  rotatingWords?: string[];
+}
+
+export function Hero({ headline, description, rotatingWords }: HeroProps = {}) {
+  // Filter out null/empty entries that Sanity can return when the array was
+  // never properly populated in Studio. Fall back to defaults if nothing valid.
+  const filtered = (rotatingWords ?? []).filter(
+    (w): w is string => typeof w === "string" && w.trim().length > 0,
+  );
+  const words = filtered.length > 0 ? filtered : DEFAULT_ROTATING_WORDS;
   const [wordIndex, setWordIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+      setWordIndex((prev) => (prev + 1) % words.length);
     }, 2500);
     return () => clearInterval(interval);
-  }, []);
+  }, [words.length]);
 
   return (
     <header id="hero" className="relative min-h-screen flex items-center overflow-hidden">
@@ -43,7 +58,7 @@ export function Hero() {
               transition={{ duration: 0.4 }}
               className="block font-heading text-lg md:text-xl font-semibold text-navy-light uppercase tracking-[2px]"
             >
-              {rotatingWords[wordIndex]}
+              {words[wordIndex]}
             </motion.span>
           </AnimatePresence>
         </motion.div>
@@ -54,7 +69,7 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="font-heading text-4xl md:text-5xl lg:text-[3.4rem] font-bold text-white leading-[1.15] tracking-tight mb-6 max-w-[800px]"
         >
-          Disrupting the Healthcare Status Quo for Nevada Employers
+          {headline || DEFAULT_HEADLINE}
         </motion.h1>
 
         <motion.p
@@ -63,7 +78,7 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="text-lg text-white/70 mb-10 max-w-[620px] leading-relaxed"
         >
-          The ReForm Health Alliance is a collective of leading Nevada organizations working together to deliver better employee healthcare benefits at sustainably lower costs — redirecting billions back to our communities.
+          {description || DEFAULT_DESCRIPTION}
         </motion.p>
 
         <motion.div

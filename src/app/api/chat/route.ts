@@ -3,11 +3,27 @@ import { z } from "zod";
 import { SITE_CONTEXT } from "@/data/site-context";
 import { writeClient } from "@/sanity/lib/writeClient";
 import { sendThankYouEmail, sendNotificationEmail } from "@/lib/email";
+import { verifyTurnstile, clientIp } from "@/lib/turnstile";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages, turnstileToken }: { messages: UIMessage[]; turnstileToken?: string } =
+    await req.json();
+
+  // Gate the start of a conversation with Turnstile: a bot that can't pass the
+  // challenge can't open a chat, so it can never reach the lead-capture tool.
+  // Only the opening message is checked (tokens are single-use). Fails open
+  // until TURNSTILE_SECRET_KEY is configured.
+  if (messages.length <= 1) {
+    const human = await verifyTurnstile(turnstileToken, clientIp(req));
+    if (!human) {
+      return new Response(
+        JSON.stringify({ error: "Verification failed. Please refresh and try again." }),
+        { status: 400, headers: { "Content-Type": "application/json" } },
+      );
+    }
+  }
 
   const result = streamText({
     model: "anthropic/claude-sonnet-4.6",
