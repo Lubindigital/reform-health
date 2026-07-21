@@ -9,12 +9,14 @@ export async function POST(request: NextRequest) {
 
   // Honeypot: real users never fill this hidden field. Silently accept and drop.
   if (typeof website === "string" && website.trim()) {
+    console.warn(`[contact] honeypot triggered; dropping submission from ${email || "unknown"}`);
     return NextResponse.json({ success: true });
   }
 
   // Bot check. Fails open until TURNSTILE_SECRET_KEY is configured.
   const human = await verifyTurnstile(turnstileToken, clientIp(request));
   if (!human) {
+    console.warn(`[contact] Turnstile verification failed for ${email || "unknown"}`);
     return NextResponse.json(
       { success: false, error: "Verification failed. Please try again." },
       { status: 400 },
@@ -24,7 +26,7 @@ export async function POST(request: NextRequest) {
   const formspreeAction =
     process.env.FORMSPREE_ACTION || "https://formspree.io/f/xkoprobn";
 
-  await Promise.allSettled([
+  const results = await Promise.allSettled([
     // 1. Formspree notification backup
     fetch(formspreeAction, {
       method: "POST",
@@ -51,6 +53,14 @@ export async function POST(request: NextRequest) {
     // 4. Notify Michael about the new lead
     sendNotificationEmail({ name, email, company, phone, type, message, source: "contact-form" }),
   ]);
+
+  // Surface sink failures so a lost lead is debuggable instead of silently returning success.
+  const steps = ["formspree", "sanity-write", "thankyou-email", "notify-email"];
+  results.forEach((r, i) => {
+    if (r.status === "rejected") {
+      console.error(`[contact] ${steps[i]} failed for ${email || "unknown"}:`, r.reason);
+    }
+  });
 
   return NextResponse.json({ success: true });
 }

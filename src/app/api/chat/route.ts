@@ -57,7 +57,7 @@ Guidelines:
           const formspreeAction =
             process.env.FORMSPREE_ACTION || "https://formspree.io/f/xkoprobn";
 
-          await Promise.allSettled([
+          const results = await Promise.allSettled([
             // Save to Sanity CRM
             writeClient.create({
               _type: "contact",
@@ -89,6 +89,13 @@ Guidelines:
             // Notify Michael about the new lead
             sendNotificationEmail({ name, email, company, phone, source: "chatbot" }),
           ]);
+
+          const steps = ["sanity-write", "formspree", "thankyou-email", "notify-email"];
+          results.forEach((r, i) => {
+            if (r.status === "rejected") {
+              console.error(`[chat captureLeadInfo] ${steps[i]} failed for ${email || "unknown"}:`, r.reason);
+            }
+          });
 
           return { success: true, message: `Contact info saved for ${name}` };
         },
