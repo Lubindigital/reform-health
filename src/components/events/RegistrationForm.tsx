@@ -3,6 +3,12 @@
 import { useId, useState, type ChangeEvent, type FormEvent } from "react";
 import { Turnstile } from "@/components/shared/Turnstile";
 
+declare global {
+  interface Window {
+    lintrk?: (event: string, data?: Record<string, unknown>) => void;
+  }
+}
+
 interface RegistrationFormProps {
   eventSlug: string;
   eventTitle: string;
@@ -61,6 +67,13 @@ export function RegistrationForm({ eventSlug, eventTitle }: RegistrationFormProp
       }
       setResult({ meetingLink: data.meetingLink ?? null, googleCalendarUrl: data.googleCalendarUrl ?? null });
       setStatus("success");
+
+      // LinkedIn Ads conversion: fire once when a webinar registration completes so
+      // LinkedIn can attribute it to an ad click. Guarded in case the Insight Tag was
+      // blocked by an ad-blocker or hasn't finished loading.
+      if (typeof window !== "undefined" && typeof window.lintrk === "function") {
+        window.lintrk("track", { conversion_id: 27273460 });
+      }
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
