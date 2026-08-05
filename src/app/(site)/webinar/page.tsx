@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { sanityFetch, EVENTS_QUERY } from "@/sanity/client";
-import { events as fallbackEvents, getRegisterHref, isUpcoming, type EventItem } from "@/data/events";
+import { mergeEvents, getRegisterHref, isUpcoming, type EventItem } from "@/data/events";
 
 // Vanity URL: reformnv.org/webinar always points at whatever webinar is currently
 // open for registration, so the link stays good across future events.
@@ -14,10 +14,9 @@ interface SanityEvent extends Omit<EventItem, "slug"> {
 
 export default async function WebinarRedirect() {
   const published = await sanityFetch<SanityEvent[]>(EVENTS_QUERY);
-  const all: EventItem[] =
-    published && published.length > 0
-      ? published.map(({ _id, ...e }) => ({ ...e, slug: e.slug || _id }))
-      : fallbackEvents;
+  const all: EventItem[] = mergeEvents(
+    published?.map(({ _id, ...e }) => ({ ...e, slug: e.slug || _id })),
+  );
 
   // Soonest upcoming event that has an open registration flow.
   const target = all.find((e) => {

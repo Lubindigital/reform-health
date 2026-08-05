@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import ChatWidget from "@/components/chat/ChatWidget";
 import { ThirdPartyAnalytics } from "@/components/analytics/ThirdPartyAnalytics";
-import "./globals.css";
+import "../globals.css";
 
 const instrumentSans = Instrument_Sans({
   variable: "--font-sans",

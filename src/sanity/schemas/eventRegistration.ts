@@ -4,7 +4,10 @@ export const eventRegistration = defineType({
   name: "eventRegistration",
   title: "Webinar Registration",
   type: "document",
-  // Read-only in the Studio: these come from the public form, not hand-editing.
+  // These come from the public form, never from hand-editing. `readOnly` is a
+  // Studio form concern only — the API routes write these through
+  // src/sanity/lib/writeClient.ts and are unaffected by it.
+  readOnly: true,
   fields: [
     defineField({
       name: "firstName",

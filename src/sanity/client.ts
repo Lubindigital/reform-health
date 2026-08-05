@@ -1,33 +1,21 @@
-import { createClient, type SanityClient } from "next-sanity";
-import { apiVersion } from "./env";
+import { client } from "./lib/client";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
-
-let _client: SanityClient | null = null;
-
-function getClient(): SanityClient | null {
-  if (!projectId || projectId === "placeholder") return null;
-  if (!_client) {
-    _client = createClient({
-      projectId,
-      dataset,
-      apiVersion,
-      // CDN serves cached responses for ~60s; turn it off so CMS publishes are
-      // visible on the next request instead of after a stale window.
-      useCdn: false,
-    });
-  }
-  return _client;
-}
-
+/**
+ * Safe read helper. Returns `null` rather than throwing, and gives up after 3
+ * seconds, so a slow or unreachable Sanity API degrades to the hardcoded
+ * content in src/data/ instead of hanging or 500-ing the render.
+ *
+ * Keep this contract. next-sanity's own `sanityFetch` (from defineLive) has no
+ * timeout and no try/catch — it lets rejections propagate. Since the pages that
+ * call this are `force-dynamic`, there is no cached copy to fall back on, so
+ * adopting the raw version unguarded would turn a Sanity incident into a
+ * site-wide outage. When Live Content is wired up, wrap it rather than replace
+ * this.
+ */
 export async function sanityFetch<T>(query: string, params?: Record<string, string>): Promise<T | null> {
-  const c = getClient();
-  if (!c) return null;
   try {
-    // 3-second timeout so a slow/unreachable Sanity API can't hang page renders.
     const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
-    const fetchPromise = params ? c.fetch<T>(query, params) : c.fetch<T>(query);
+    const fetchPromise = params ? client.fetch<T>(query, params) : client.fetch<T>(query);
     const result = await Promise.race([fetchPromise, timeout]);
     return (result ?? null) as T | null;
   } catch {
@@ -46,7 +34,9 @@ export const BLOG_POSTS_QUERY = `*[_type == "blogPost"] | order(publishedAt desc
   authorRole,
   publishedAt,
   readTime,
-  excerpt
+  excerpt,
+  "image": mainImage.asset->url,
+  "imageAlt": mainImage.alt
 }`;
 
 export const BLOG_POST_QUERY = `*[_type == "blogPost" && slug.current == $slug][0] {
@@ -60,6 +50,8 @@ export const BLOG_POST_QUERY = `*[_type == "blogPost" && slug.current == $slug][
   publishedAt,
   readTime,
   excerpt,
+  "image": mainImage.asset->url,
+  "imageAlt": mainImage.alt,
   body
 }`;
 

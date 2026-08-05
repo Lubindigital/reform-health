@@ -1,7 +1,7 @@
 import { streamText, convertToModelMessages, UIMessage, tool } from "ai";
 import { z } from "zod";
 import { SITE_CONTEXT } from "@/data/site-context";
-import { writeClient } from "@/sanity/lib/writeClient";
+import { createPrivateDocument } from "@/sanity/lib/writeClient";
 import { sendThankYouEmail, sendNotificationEmail } from "@/lib/email";
 import { verifyTurnstile, clientIp } from "@/lib/turnstile";
 
@@ -58,8 +58,8 @@ Guidelines:
             process.env.FORMSPREE_ACTION || "https://formspree.io/f/xkoprobn";
 
           const results = await Promise.allSettled([
-            // Save to Sanity CRM
-            writeClient.create({
+            // Save to Sanity CRM (draft — the dataset is public, see writeClient)
+            createPrivateDocument({
               _type: "contact",
               name: name || "",
               email: email || "",

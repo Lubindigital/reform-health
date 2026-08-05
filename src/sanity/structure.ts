@@ -36,11 +36,22 @@ export const structure: StructureResolver = (S) =>
         .title("Webinar Registrations")
         .icon(Users)
         .schemaType("eventRegistration")
-        .child(S.documentTypeList("eventRegistration").title("Webinar Registrations")),
+        .child(
+          // These two panes are inboxes, not content. Empty initialValueTemplates
+          // removes the "+" create button so there is no way to hand-author a
+          // fake lead alongside the real ones.
+          S.documentTypeList("eventRegistration")
+            .title("Webinar Registrations")
+            .initialValueTemplates([]),
+        ),
       S.divider(),
       S.listItem()
         .title("Contact Submissions")
         .icon(Inbox)
         .schemaType("contact")
-        .child(S.documentTypeList("contact").title("Contact Submissions")),
+        .child(
+          S.documentTypeList("contact")
+            .title("Contact Submissions")
+            .initialValueTemplates([]),
+        ),
     ]);

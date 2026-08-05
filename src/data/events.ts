@@ -78,6 +78,29 @@ export function findFallbackEvent(slug: string): EventItem | undefined {
 }
 
 /**
+ * Merge published Sanity events over the hardcoded ones BY SLUG.
+ *
+ * Callers used to do `if (published.length > 0) return published`, which meant
+ * publishing a single event in Studio made every other event disappear from
+ * /events and the homepage panel at once. Merging per-slug lets events be
+ * migrated one at a time, and keeps an unpublished or renamed event from
+ * silently emptying the page.
+ *
+ * Returned in ascending date order, which is what the callers assume when they
+ * take the first upcoming event as the featured one.
+ */
+export function mergeEvents(published: EventItem[] | null | undefined): EventItem[] {
+  const fromSanity = (published ?? []).filter((e) => e?.slug);
+  const claimed = new Set(fromSanity.map((e) => e.slug));
+  const remaining = events.filter((e) => !claimed.has(e.slug));
+
+  // startDate is an ISO calendar date (YYYY-MM-DD), so string compare sorts it.
+  return [...fromSanity, ...remaining].sort((a, b) =>
+    a.startDate.localeCompare(b.startDate),
+  );
+}
+
+/**
  * Where the "Register" button should point for an event.
  * - A gated event (has `meetingLink`) routes to the built-in registration page.
  * - Otherwise an external `registrationUrl` opens in a new tab.

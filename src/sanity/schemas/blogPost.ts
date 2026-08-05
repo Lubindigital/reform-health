@@ -24,6 +24,30 @@ export const blogPost = defineType({
       type: "string",
     }),
     defineField({
+      name: "mainImage",
+      title: "Cover Image",
+      type: "image",
+      description:
+        "Shown on the blog listing card and at the top of the article. Landscape works best — around 800×450.",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alt Text",
+          type: "string",
+          description:
+            "Describe the image for screen readers and for anyone whose images fail to load.",
+        }),
+      ],
+      validation: (rule) =>
+        rule.custom((value: { asset?: unknown; alt?: string } | undefined) => {
+          if (!value?.asset) return true; // image is optional
+          return value.alt?.trim()
+            ? true
+            : "Add alt text so the cover image is accessible.";
+        }),
+    }),
+    defineField({
       name: "category",
       title: "Category",
       type: "string",

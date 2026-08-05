@@ -22,20 +22,28 @@ interface BlogPost {
   publishedAt: string;
   readTime: string;
   excerpt: string;
+  image?: string | null;
+  imageAlt?: string | null;
   body?: unknown[];
 }
 
+/**
+ * Union of Sanity slugs and the slugs still living in src/data/blogContent.ts.
+ *
+ * This previously returned only the Sanity slugs whenever Sanity had any posts,
+ * which meant publishing one post in Studio stopped prerendering every
+ * unmigrated article. Taking the union keeps both sets routable while the
+ * migration is in progress.
+ */
 export async function generateStaticParams() {
-  try {
-    const posts = await sanityFetch<BlogPost[]>(BLOG_POSTS_QUERY);
-    if (posts && posts.length > 0) {
-      return posts.map((post) => ({ slug: post.slug }));
-    }
-  } catch {
-    // Sanity not configured yet
+  const posts = await sanityFetch<BlogPost[]>(BLOG_POSTS_QUERY);
+
+  const slugs = new Set<string>(Object.keys(blogPostContent));
+  for (const post of posts ?? []) {
+    if (post?.slug) slugs.add(post.slug);
   }
-  // Fallback to static slugs
-  return [{ slug: "our-blueprint" }, { slug: "pricing-myths" }];
+
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -109,6 +117,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const readTime = post?.readTime || fallback?.readTime || "";
   const author = post?.author || fallback?.author || "";
   const authorRole = post?.authorRole || fallback?.authorRole || "";
+  // Prefer the Sanity cover image. Before mainImage existed on the schema this
+  // read fallback?.image only, so a Sanity-authored post could never have a hero.
+  const heroImage = post?.image || fallback?.image || "";
+  const heroImageAlt = post?.imageAlt || title;
 
   return (
     <>
@@ -127,11 +139,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {subtitle && <p className="text-xl text-gray-500 mb-4">{subtitle}</p>}
             <p className="text-sm text-gray-400 mb-8">By <strong className="text-gray-700">{author}</strong>, {authorRole}</p>
 
-            {(fallback?.image) && (
+            {heroImage && (
               <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
                 <Image
-                  src={fallback.image}
-                  alt={title}
+                  src={heroImage}
+                  alt={heroImageAlt}
                   fill
                   className="object-cover"
                 />

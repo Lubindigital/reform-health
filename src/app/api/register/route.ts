@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeClient } from "@/sanity/lib/writeClient";
+import { createPrivateDocument } from "@/sanity/lib/writeClient";
 import { sanityFetch, EVENT_MEETING_QUERY } from "@/sanity/client";
 import { findFallbackEvent, formatEventDate, type EventItem } from "@/data/events";
 import { buildICS, googleCalendarUrl } from "@/lib/ics";
@@ -125,7 +125,8 @@ export async function POST(request: NextRequest) {
   // Persist + notify in parallel; none of these should block the response, so a
   // transient email/CMS hiccup still lets the registrant see their link.
   const results = await Promise.allSettled([
-    writeClient.create({
+    // Draft, not published — the dataset is public. See writeClient.
+    createPrivateDocument({
       _type: "eventRegistration",
       firstName,
       lastName,

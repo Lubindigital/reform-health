@@ -3,7 +3,7 @@ import { FadeUp } from "@/components/motion/FadeUp";
 import { RegisterButton } from "@/components/events/RegisterButton";
 import { sanityFetch, EVENTS_QUERY } from "@/sanity/client";
 import {
-  events as fallbackEvents,
+  mergeEvents,
   formatEventShort,
   getRegisterHref,
   isUpcoming,
@@ -17,10 +17,7 @@ interface SanityEvent extends Omit<EventItem, "slug"> {
 
 async function getNextEvent(): Promise<EventItem | null> {
   const published = await sanityFetch<SanityEvent[]>(EVENTS_QUERY);
-  const all =
-    published && published.length > 0
-      ? published.map(({ _id, ...e }) => ({ ...e, slug: e.slug || _id }))
-      : fallbackEvents;
+  const all = mergeEvents(published?.map(({ _id, ...e }) => ({ ...e, slug: e.slug || _id })));
   return all.find((e) => isUpcoming(e.startDate)) ?? null;
 }
 

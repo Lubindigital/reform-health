@@ -9,7 +9,7 @@ import {
   PastEventRow,
 } from "@/components/events/EventCard";
 import { sanityFetch, EVENTS_QUERY } from "@/sanity/client";
-import { events as fallbackEvents, isUpcoming, type EventItem } from "@/data/events";
+import { mergeEvents, isUpcoming, type EventItem } from "@/data/events";
 
 export const metadata: Metadata = {
   title: "Events | ReForm Health Alliance",
@@ -37,10 +37,7 @@ interface SanityEvent extends Omit<EventItem, "slug"> {
 
 async function getEvents(): Promise<EventItem[]> {
   const published = await sanityFetch<SanityEvent[]>(EVENTS_QUERY);
-  if (published && published.length > 0) {
-    return published.map(({ _id, ...e }) => ({ ...e, slug: e.slug || _id }));
-  }
-  return fallbackEvents;
+  return mergeEvents(published?.map(({ _id, ...e }) => ({ ...e, slug: e.slug || _id })));
 }
 
 export default async function EventsPage() {

@@ -21,26 +21,65 @@ interface SanityPost {
   publishedAt: string;
   readTime: string;
   excerpt: string;
+  image?: string | null;
+  imageAlt?: string | null;
 }
 
-async function getPosts() {
-  try {
-    const posts = await sanityFetch<SanityPost[]>(BLOG_POSTS_QUERY);
-    if (posts && posts.length > 0) {
-      return posts.map((p) => ({
-        slug: p.slug,
-        title: p.title,
-        category: p.category,
-        date: new Date(p.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-        readTime: p.readTime,
-        excerpt: p.excerpt,
-        author: p.author,
-      }));
-    }
-  } catch {
-    // Sanity not configured yet
-  }
-  return fallbackPosts;
+interface ListedPost {
+  slug: string;
+  title: string;
+  category: string;
+  date: string;
+  readTime: string;
+  excerpt: string;
+  author: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+/**
+ * Merge Sanity posts over the hardcoded ones BY SLUG.
+ *
+ * This used to be all-or-nothing: `if (posts.length > 0)` returned only the
+ * Sanity list, so publishing a single post in Studio silently removed every
+ * other post from /blog. Now Sanity wins per-slug and anything not yet migrated
+ * keeps rendering from src/data/blog.ts, which makes the migration incremental
+ * instead of a cliff.
+ */
+async function getPosts(): Promise<ListedPost[]> {
+  const posts = await sanityFetch<SanityPost[]>(BLOG_POSTS_QUERY);
+
+  const fromSanity: ListedPost[] = (posts ?? [])
+    .filter((p) => p?.slug)
+    .map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      category: p.category,
+      date: p.publishedAt
+        ? new Date(p.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+        : "",
+      readTime: p.readTime,
+      excerpt: p.excerpt,
+      author: p.author,
+      ...(p.image ? { image: p.image, imageAlt: p.imageAlt ?? p.title } : {}),
+    }));
+
+  const claimed = new Set(fromSanity.map((p) => p.slug));
+  const remaining = fallbackPosts
+    .filter((p) => !claimed.has(p.slug))
+    .map(({ slug, title, category, date, readTime, excerpt, author, image }) => ({
+      slug,
+      title,
+      category,
+      date,
+      readTime,
+      excerpt,
+      author,
+      image,
+      imageAlt: title,
+    }));
+
+  return [...fromSanity, ...remaining];
 }
 
 export default async function BlogPage() {
@@ -66,11 +105,11 @@ export default async function BlogPage() {
                     href={`/blog/${post.slug}`}
                     className="block bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-navy/20 hover:shadow-[0_4px_12px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all cursor-pointer group"
                   >
-                    {"image" in post && (
+                    {post.image && (
                       <div className="relative h-52 overflow-hidden">
                         <Image
-                          src={String(post.image)}
-                          alt={post.title}
+                          src={post.image}
+                          alt={post.imageAlt ?? post.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />

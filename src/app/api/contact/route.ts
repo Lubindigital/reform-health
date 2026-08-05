@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeClient } from "@/sanity/lib/writeClient";
+import { createPrivateDocument } from "@/sanity/lib/writeClient";
 import { sendThankYouEmail, sendNotificationEmail } from "@/lib/email";
 import { verifyTurnstile, clientIp } from "@/lib/turnstile";
 
@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({ name, company, email, phone, type, message }),
     }),
 
-    // 2. Save to Sanity CRM
-    writeClient.create({
+    // 2. Save to Sanity CRM (as a draft — the dataset is public, see writeClient)
+    createPrivateDocument({
       _type: "contact",
       name: name || "",
       email: email || "",

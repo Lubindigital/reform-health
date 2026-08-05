@@ -4,6 +4,9 @@ export const contact = defineType({
   name: "contact",
   title: "Contact Submission",
   type: "document",
+  // Written by /api/contact and the chatbot lead capture, never by hand.
+  // `readOnly` is a Studio form concern only — writeClient is unaffected.
+  readOnly: true,
   fields: [
     defineField({
       name: "name",
