@@ -30,11 +30,12 @@ const ICON_CHOICES = [
 ];
 
 /** Shared image field: hotspot on, alt text required once an asset is picked. */
-const imageField = (name: string, title: string, description: string) =>
+const imageField = (name: string, title: string, fieldset: string, description: string) =>
   defineField({
     name,
     title,
     type: "image",
+    fieldset,
     description,
     options: { hotspot: true },
     fields: [
@@ -56,32 +57,32 @@ export const homePage = defineType({
   name: "homePage",
   title: "Home Page",
   type: "document",
-  groups: [
-    { name: "hero", title: "Hero", default: true },
-    { name: "northStar", title: "North Star" },
-    { name: "about", title: "About" },
-    { name: "beliefs", title: "Beliefs" },
-    { name: "initiatives", title: "Initiatives" },
-    { name: "membership", title: "Membership" },
-    { name: "cta", title: "Closing CTA" },
+  // Fieldsets, not groups. Groups render as tabs, and Sanity collapses tabs into
+  // a single dropdown when the form is narrow — which is exactly what the
+  // Presentation tool's document pane is. Seven tabs became one dropdown showing
+  // one section, so the page looked almost empty and six of seven sections were
+  // invisible unless you knew to go hunting. Fieldsets stay inline and
+  // collapsible at any width, and they appear in the same top-to-bottom order as
+  // the sections on the real page.
+  fieldsets: [
+    { name: "hero", title: "1 · Hero", options: { collapsible: true, collapsed: false } },
+    { name: "northStar", title: "2 · North Star goals", options: { collapsible: true, collapsed: true } },
+    { name: "about", title: "3 · About", options: { collapsible: true, collapsed: true } },
+    { name: "beliefs", title: "4 · Beliefs", options: { collapsible: true, collapsed: true } },
+    { name: "initiatives", title: "5 · Initiatives", options: { collapsible: true, collapsed: true } },
+    { name: "membership", title: "6 · Membership", options: { collapsible: true, collapsed: true } },
+    { name: "cta", title: "7 · Closing call to action", options: { collapsible: true, collapsed: true } },
   ],
   fields: [
     // ---------------------------------------------------------------- hero
-    defineField({
-      name: "heroRotatingWords",
-      title: "Rotating words",
-      type: "array",
-      group: "hero",
-      of: [defineArrayMember({ type: "string" })],
-      description:
-        "Cycled one at a time above the headline, every 2.5 seconds. Keep them short — two or three words.",
-      validation: (rule) => rule.min(1).max(6),
-    }),
+    // Headline first. It was below the rotating-words array, so the most
+    // important string on the site sat under a list widget and was the last
+    // thing you saw in a narrow editing pane.
     defineField({
       name: "heroHeadline",
       title: "Headline",
       type: "string",
-      group: "hero",
+      fieldset: "hero",
       description: "The first thing visitors read. One sentence.",
       validation: (rule) => rule.required().max(120),
     }),
@@ -90,43 +91,53 @@ export const homePage = defineType({
       title: "Description",
       type: "text",
       rows: 3,
-      group: "hero",
+      fieldset: "hero",
       description: "Two or three lines under the headline.",
       validation: (rule) => rule.max(400),
+    }),
+    defineField({
+      name: "heroRotatingWords",
+      title: "Rotating words",
+      type: "array",
+      fieldset: "hero",
+      of: [defineArrayMember({ type: "string" })],
+      description:
+        "Cycled one at a time above the headline, every 2.5 seconds. Keep them short — two or three words.",
+      validation: (rule) => rule.min(1).max(6),
     }),
     defineField({
       name: "heroPrimaryCtaLabel",
       title: "Primary button label",
       type: "string",
-      group: "hero",
+      fieldset: "hero",
     }),
     defineField({
       name: "heroSecondaryCtaLabel",
       title: "Secondary button label",
       type: "string",
-      group: "hero",
+      fieldset: "hero",
     }),
-    imageField("heroImage", "Background image", "Sits behind a dark navy overlay, so choose something with room for white text. Wide and landscape works best."),
+    imageField("heroImage", "Background image", "hero", "Sits behind a dark navy overlay, so choose something with room for white text. Wide and landscape works best."),
 
     // ----------------------------------------------------------- north star
     defineField({
       name: "northStarEyebrow",
       title: "Eyebrow",
       type: "string",
-      group: "northStar",
+      fieldset: "northStar",
       description: "Small uppercase label above the heading.",
     }),
     defineField({
       name: "northStarTitle",
       title: "Heading",
       type: "string",
-      group: "northStar",
+      fieldset: "northStar",
     }),
     defineField({
       name: "kpis",
       title: "Goal cards",
       type: "array",
-      group: "northStar",
+      fieldset: "northStar",
       description:
         "Exactly three. The layout is a three-column grid — a fourth card would sit alone on its own row.",
       validation: (rule) => rule.min(3).max(3),
@@ -162,19 +173,19 @@ export const homePage = defineType({
       name: "aboutEyebrow",
       title: "Eyebrow",
       type: "string",
-      group: "about",
+      fieldset: "about",
     }),
     defineField({
       name: "aboutTitle",
       title: "Heading",
       type: "string",
-      group: "about",
+      fieldset: "about",
     }),
     defineField({
       name: "aboutBody",
       title: "Body",
       type: "array",
-      group: "about",
+      fieldset: "about",
       description: "Paragraphs of prose. Bold works; headings and lists are intentionally unavailable here.",
       of: [
         defineArrayMember({
@@ -192,7 +203,7 @@ export const homePage = defineType({
       name: "aboutImages",
       title: "Images",
       type: "array",
-      group: "about",
+      fieldset: "about",
       description: "Two images, shown side by side.",
       validation: (rule) => rule.max(2),
       of: [
@@ -209,19 +220,19 @@ export const homePage = defineType({
       name: "beliefsEyebrow",
       title: "Eyebrow",
       type: "string",
-      group: "beliefs",
+      fieldset: "beliefs",
     }),
     defineField({
       name: "beliefsTitle",
       title: "Heading",
       type: "string",
-      group: "beliefs",
+      fieldset: "beliefs",
     }),
     defineField({
       name: "beliefs",
       title: "Beliefs",
       type: "array",
-      group: "beliefs",
+      fieldset: "beliefs",
       description:
         "Numbered automatically from their order here — drag to renumber. No number field to keep in sync.",
       validation: (rule) => rule.min(1),
@@ -243,26 +254,26 @@ export const homePage = defineType({
       name: "initiativesEyebrow",
       title: "Eyebrow",
       type: "string",
-      group: "initiatives",
+      fieldset: "initiatives",
     }),
     defineField({
       name: "initiativesTitle",
       title: "Heading",
       type: "string",
-      group: "initiatives",
+      fieldset: "initiatives",
     }),
     defineField({
       name: "initiativesDescription",
       title: "Intro",
       type: "text",
       rows: 2,
-      group: "initiatives",
+      fieldset: "initiatives",
     }),
     defineField({
       name: "initiativesImages",
       title: "Images",
       type: "array",
-      group: "initiatives",
+      fieldset: "initiatives",
       description: "Two images, shown side by side next to the intro.",
       validation: (rule) => rule.max(2),
       of: [
@@ -277,7 +288,7 @@ export const homePage = defineType({
       name: "initiatives",
       title: "Initiative cards",
       type: "array",
-      group: "initiatives",
+      fieldset: "initiatives",
       // Cannot be emptied. An empty array falls through to the hardcoded launch
       // copy in src/data/initiatives.ts, so deleting the last card would
       // republish six old cards instead of clearing the section.
@@ -308,26 +319,26 @@ export const homePage = defineType({
       name: "membershipEyebrow",
       title: "Eyebrow",
       type: "string",
-      group: "membership",
+      fieldset: "membership",
     }),
     defineField({
       name: "membershipTitle",
       title: "Heading",
       type: "string",
-      group: "membership",
+      fieldset: "membership",
     }),
     defineField({
       name: "membershipDescription",
       title: "Intro",
       type: "text",
       rows: 3,
-      group: "membership",
+      fieldset: "membership",
     }),
     defineField({
       name: "benefits",
       title: "Member benefits",
       type: "array",
-      group: "membership",
+      fieldset: "membership",
       description: "Each one gets a checkmark. Listed in this order.",
       // Same reason as initiatives: emptying it resurrects the hardcoded list.
       validation: (rule) => rule.min(1),
@@ -349,7 +360,7 @@ export const homePage = defineType({
       name: "ctaHeadline",
       title: "Headline",
       type: "string",
-      group: "cta",
+      fieldset: "cta",
       description: "The closing pitch, just above the contact form.",
     }),
     defineField({
@@ -357,15 +368,15 @@ export const homePage = defineType({
       title: "Description",
       type: "text",
       rows: 2,
-      group: "cta",
+      fieldset: "cta",
     }),
     defineField({
       name: "ctaButtonLabel",
       title: "Button label",
       type: "string",
-      group: "cta",
+      fieldset: "cta",
     }),
-    imageField("ctaImage", "Background image", "Sits behind a dark navy overlay, like the hero."),
+    imageField("ctaImage", "Background image", "cta", "Sits behind a dark navy overlay, like the hero."),
   ],
   preview: {
     prepare: () => ({ title: "Home Page" }),

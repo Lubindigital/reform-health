@@ -2,7 +2,7 @@ import type { StructureResolver } from "sanity/structure";
 import { CalendarDays, FileText, Home, Inbox, Users } from "lucide-react";
 
 // Custom Studio sidebar so dad sees a clean, organized list:
-//   Site Settings (singleton — edits the whole site at once)
+//   Home Page (singleton — every section of the home page)
 //   Blog Posts
 //   Events
 //   Webinar Registrations
