@@ -17,15 +17,22 @@ import {structure} from './src/sanity/structure'
 const SINGLETON_TYPES = new Set(['siteSettings'])
 const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore'])
 
-// Form submissions. These are written by the API routes, never by hand, and
-// they sit in the same sidebar the site owner browses for content — two clicks
-// from Delete, with an undo toast that expires. Lock the destructive actions.
-// `publish` is blocked too, on purpose. These are written as drafts so they
-// stay invisible to unauthenticated readers of this public dataset — see
-// src/sanity/lib/writeClient.ts. Publishing one would put a real person's name,
-// email and phone number back on the open API.
+// Form submissions. Written by the API routes, never by hand, and they sit in
+// the same sidebar the site owner browses for content.
+//
+// This is an ALLOWLIST rather than a denylist, and the list is empty on
+// purpose. Sanity ships twelve built-in document actions and a denylist only
+// ever covers the ones you thought of — `schedule` (Scheduled Publishing) and
+// the Canvas actions would have sailed straight through and published a lead's
+// name, email and phone number onto a PUBLIC dataset, defeating the draft-only
+// privacy scheme in src/sanity/lib/writeClient.ts. An allowlist also holds when
+// Sanity adds a thirteenth action.
+//
+// Consequence: these documents have no action buttons at all. If spam ever
+// needs clearing, add 'delete' here deliberately rather than leaving the door
+// open by default.
 const SUBMISSION_TYPES = new Set(['contact', 'eventRegistration'])
-const SUBMISSION_BLOCKED = new Set(['delete', 'duplicate', 'unpublish', 'publish'])
+const SUBMISSION_ACTIONS = new Set<string>([])
 
 export default defineConfig({
   basePath: '/studio',
@@ -45,7 +52,7 @@ export default defineConfig({
         return prev.filter(({action}) => action && SINGLETON_ACTIONS.has(action))
       }
       if (SUBMISSION_TYPES.has(context.schemaType)) {
-        return prev.filter(({action}) => !action || !SUBMISSION_BLOCKED.has(action))
+        return prev.filter(({action}) => action && SUBMISSION_ACTIONS.has(action))
       }
       return prev
     },
