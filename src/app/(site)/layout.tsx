@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Instrument_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import ChatWidget from "@/components/chat/ChatWidget";
 import { ThirdPartyAnalytics } from "@/components/analytics/ThirdPartyAnalytics";
 import "../globals.css";
 
@@ -67,7 +66,11 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <ThirdPartyAnalytics />
-        <ChatWidget />
+        {/*
+          Chat widget switched off 2026-08-05. The component, the /api/chat
+          route and the knowledge base in src/data/site-context.ts are all still
+          here — re-enable by importing ChatWidget and rendering it again.
+        */}
       </body>
     </html>
   );
