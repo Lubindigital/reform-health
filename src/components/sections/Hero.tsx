@@ -9,13 +9,31 @@ const DEFAULT_DESCRIPTION =
   "The ReForm Health Alliance is a collective of leading Nevada organizations working together to deliver better employee healthcare benefits at sustainably lower costs — redirecting billions back to our communities.";
 const DEFAULT_ROTATING_WORDS = ["Better Outcomes", "Lower Costs", "Stronger Communities"];
 
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&h=1080&fit=crop&q=80";
+const DEFAULT_IMAGE_ALT = "Healthcare professionals collaborating";
+const DEFAULT_PRIMARY_CTA = "Join ReForm";
+const DEFAULT_SECONDARY_CTA = "Our Goal";
+
 export interface HeroProps {
   headline?: string;
   description?: string;
   rotatingWords?: string[];
+  primaryCtaLabel?: string;
+  secondaryCtaLabel?: string;
+  image?: string | null;
+  imageAlt?: string | null;
 }
 
-export function Hero({ headline, description, rotatingWords }: HeroProps = {}) {
+export function Hero({
+  headline,
+  description,
+  rotatingWords,
+  primaryCtaLabel,
+  secondaryCtaLabel,
+  image,
+  imageAlt,
+}: HeroProps = {}) {
   // Filter out null/empty entries that Sanity can return when the array was
   // never properly populated in Studio. Fall back to defaults if nothing valid.
   const filtered = (rotatingWords ?? []).filter(
@@ -34,8 +52,8 @@ export function Hero({ headline, description, rotatingWords }: HeroProps = {}) {
   return (
     <header id="hero" className="relative min-h-screen flex items-center overflow-hidden">
       <Image
-        src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&h=1080&fit=crop&q=80"
-        alt="Healthcare professionals collaborating"
+        src={image || DEFAULT_IMAGE}
+        alt={imageAlt || DEFAULT_IMAGE_ALT}
         fill
         className="object-cover"
         priority
@@ -88,10 +106,10 @@ export function Hero({ headline, description, rotatingWords }: HeroProps = {}) {
           className="flex flex-col sm:flex-row gap-3.5"
         >
           <a href="#contact" className="bg-navy-light hover:bg-navy text-white px-8 py-3.5 rounded-lg text-sm font-semibold text-center transition-colors cursor-pointer">
-            Join ReForm
+            {primaryCtaLabel || DEFAULT_PRIMARY_CTA}
           </a>
           <a href="#northstar" className="border border-white/25 text-white/90 px-8 py-3.5 rounded-lg text-sm font-semibold text-center hover:bg-white/10 transition-all backdrop-blur-sm cursor-pointer">
-            Our Goal
+            {secondaryCtaLabel || DEFAULT_SECONDARY_CTA}
           </a>
         </motion.div>
       </div>

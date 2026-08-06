@@ -8,19 +8,33 @@ const DEFAULT_HEADLINE = "Ready to transform your health benefits into a valuabl
 const DEFAULT_DESCRIPTION =
   "Join the growing coalition of Nevada employers who are demanding better. The status quo ends when we act together.";
 
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=1400&h=600&fit=crop&q=80";
+const DEFAULT_IMAGE_ALT = "Healthcare professionals";
+const DEFAULT_BUTTON_LABEL = "Join ReForm";
+
 export interface CtaBannerProps {
   headline?: string;
   description?: string;
+  buttonLabel?: string;
+  image?: string | null;
+  imageAlt?: string | null;
 }
 
-export function CtaBanner({ headline, description }: CtaBannerProps = {}) {
+export function CtaBanner({
+  headline,
+  description,
+  buttonLabel,
+  image,
+  imageAlt,
+}: CtaBannerProps = {}) {
   return (
     <section className="py-20">
       <div className="max-w-[1120px] mx-auto px-6">
         <div className="relative rounded-3xl overflow-hidden py-20 px-8 text-center">
           <Image
-            src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=1400&h=600&fit=crop&q=80"
-            alt="Healthcare professionals"
+            src={image || DEFAULT_IMAGE}
+            alt={imageAlt || DEFAULT_IMAGE_ALT}
             fill
             className="object-cover"
           />
@@ -52,7 +66,7 @@ export function CtaBanner({ headline, description }: CtaBannerProps = {}) {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="inline-block bg-navy-light hover:bg-navy text-white px-9 py-4 rounded-lg text-base font-semibold transition-colors cursor-pointer"
               >
-                Join ReForm
+                {buttonLabel || DEFAULT_BUTTON_LABEL}
               </motion.a>
             </FadeUp>
           </div>

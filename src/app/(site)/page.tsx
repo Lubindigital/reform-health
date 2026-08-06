@@ -11,8 +11,9 @@ import { Insights } from "@/components/sections/Insights";
 import { InTheNews } from "@/components/sections/InTheNews";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { Contact } from "@/components/sections/Contact";
-import { SITE_SETTINGS_QUERY } from "@/sanity/client";
+import { HOME_PAGE_QUERY } from "@/sanity/client";
 import { draftAwareFetch } from "@/sanity/lib/live";
+import type { HomePage } from "@/sanity/homePageTypes";
 
 // Re-fetch on every request so CMS edits show up immediately. The homepage is
 // cheap to render and content updates need to be visible the moment dad hits
@@ -26,39 +27,63 @@ import { draftAwareFetch } from "@/sanity/lib/live";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-interface SiteSettings {
-  heroHeadline?: string;
-  heroDescription?: string;
-  rotatingWords?: string[];
-  ctaHeadline?: string;
-  ctaDescription?: string;
-}
-
 export default async function Home() {
-  // Pull editable copy from Sanity. Falls back to component defaults if Sanity
-  // is unreachable or the singleton hasn't been created yet.
-  const settings = (await draftAwareFetch<SiteSettings>(SITE_SETTINGS_QUERY)) ?? {};
+  // One query for the whole page. Each section falls back to the copy hardcoded
+  // in its own component if the document is missing a field, or if Sanity is
+  // unreachable — draftAwareFetch returns null rather than throwing.
+  const home = (await draftAwareFetch<HomePage>(HOME_PAGE_QUERY)) ?? {};
 
   return (
     <>
       <Navbar />
       <main>
         <Hero
-          headline={settings.heroHeadline}
-          description={settings.heroDescription}
-          rotatingWords={settings.rotatingWords}
+          headline={home.heroHeadline}
+          description={home.heroDescription}
+          rotatingWords={home.heroRotatingWords}
+          primaryCtaLabel={home.heroPrimaryCtaLabel}
+          secondaryCtaLabel={home.heroSecondaryCtaLabel}
+          image={home.heroImage}
+          imageAlt={home.heroImageAlt}
         />
-        <Kpis />
-        <About />
-        <Beliefs />
-        <Initiatives />
-        <Membership />
+        <Kpis
+          eyebrow={home.northStarEyebrow}
+          title={home.northStarTitle}
+          kpis={home.kpis}
+        />
+        <About
+          eyebrow={home.aboutEyebrow}
+          title={home.aboutTitle}
+          body={home.aboutBody}
+          images={home.aboutImages}
+        />
+        <Beliefs
+          eyebrow={home.beliefsEyebrow}
+          title={home.beliefsTitle}
+          beliefs={home.beliefs}
+        />
+        <Initiatives
+          eyebrow={home.initiativesEyebrow}
+          title={home.initiativesTitle}
+          description={home.initiativesDescription}
+          images={home.initiativesImages}
+          initiatives={home.initiatives}
+        />
+        <Membership
+          eyebrow={home.membershipEyebrow}
+          title={home.membershipTitle}
+          description={home.membershipDescription}
+          benefits={home.benefits}
+        />
         <UpcomingEvents />
         <Insights />
         <InTheNews />
         <CtaBanner
-          headline={settings.ctaHeadline}
-          description={settings.ctaDescription}
+          headline={home.ctaHeadline}
+          description={home.ctaDescription}
+          buttonLabel={home.ctaButtonLabel}
+          image={home.ctaImage}
+          imageAlt={home.ctaImageAlt}
         />
         <Contact />
       </main>

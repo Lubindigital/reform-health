@@ -106,6 +106,53 @@ export const EVENT_MEETING_QUERY = `*[_type == "event" && slug.current == $slug]
   location
 }`;
 
+// ONE query for the entire home page, deliberately.
+//
+// Every sanityFetch is two network round-trips (a sync-tag probe plus the real
+// query), and the free plan caps uncached API requests. Eleven sections each
+// fetching their own slice would be 22 requests per cache miss instead of 2.
+// `_key` is projected on every array so the visual editing overlay can address
+// individual items and support drag-to-reorder.
+export const HOME_PAGE_QUERY = `*[_type == "homePage"][0] {
+  heroRotatingWords,
+  heroHeadline,
+  heroDescription,
+  heroPrimaryCtaLabel,
+  heroSecondaryCtaLabel,
+  "heroImage": heroImage.asset->url,
+  "heroImageAlt": heroImage.alt,
+
+  northStarEyebrow,
+  northStarTitle,
+  kpis[] { _key, value, label, description },
+
+  aboutEyebrow,
+  aboutTitle,
+  aboutBody,
+  "aboutImages": aboutImages[] { _key, "url": asset->url, alt },
+
+  beliefsEyebrow,
+  beliefsTitle,
+  beliefs[] { _key, title, description },
+
+  initiativesEyebrow,
+  initiativesTitle,
+  initiativesDescription,
+  "initiativesImages": initiativesImages[] { _key, "url": asset->url, alt },
+  initiatives[] { _key, icon, title, description },
+
+  membershipEyebrow,
+  membershipTitle,
+  membershipDescription,
+  benefits[] { _key, title, description },
+
+  ctaHeadline,
+  ctaDescription,
+  ctaButtonLabel,
+  "ctaImage": ctaImage.asset->url,
+  "ctaImageAlt": ctaImage.alt
+}`;
+
 export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
   heroHeadline,
   heroDescription,

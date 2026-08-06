@@ -16,7 +16,7 @@ import {resolve} from './src/sanity/presentation/resolve'
 // Actions menu. Duplicate was the dangerous one — it mints a second settings
 // document with a random id while the structure and the GROQ query keep reading
 // the original, so you'd be editing a ghost with no feedback.
-const SINGLETON_TYPES = new Set(['siteSettings'])
+const SINGLETON_TYPES = new Set(['siteSettings', 'homePage'])
 const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore'])
 
 // Form submissions. Written by the API routes, never by hand, and they sit in
@@ -46,7 +46,7 @@ export default defineConfig({
     // so dad doesn't accidentally make a second one. The Studio sidebar shows
     // the single editable instance via custom structure.
     templates: (templates) =>
-      templates.filter((t) => t.schemaType !== 'siteSettings'),
+      templates.filter((t) => !SINGLETON_TYPES.has(t.schemaType)),
   },
   document: {
     actions: (prev, context) => {
