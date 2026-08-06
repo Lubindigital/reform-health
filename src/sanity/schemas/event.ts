@@ -9,9 +9,12 @@ export const event = defineType({
     { name: "details", title: "Date & Details" },
     { name: "registration", title: "Registration" },
   ],
-  // NOTE: `meetingLink` below is intentionally excluded from the public
-  // EVENTS_QUERY. It is fetched server-side only and released to a registrant
-  // after they submit the registration form.
+  // NOTE: this document carries NO join link, deliberately. Events must be
+  // published to render, the dataset is public, and excluding a field from a
+  // GROQ projection is not access control — anyone can write their own query.
+  // The link lives on a never-published `eventJoinLink` document instead; see
+  // src/sanity/schemas/eventJoinLink.ts. The `usesBuiltInRegistration` toggle
+  // below is what tells the public UI an event is gated.
   fields: [
     defineField({
       name: "title",
@@ -125,12 +128,13 @@ export const event = defineType({
       initialValue: true,
     }),
     defineField({
-      name: "meetingLink",
-      title: "Private Meeting Link",
-      type: "url",
+      name: "usesBuiltInRegistration",
+      title: "Use the built-in registration form",
+      type: "boolean",
       group: "registration",
+      initialValue: false,
       description:
-        "The join link (e.g. Google Meet). Kept private and only sent to people after they register. If set, the Register button opens the built-in registration form.",
+        'Turn on to send people to this site\'s own sign-up form, which emails them the join link. Add the link itself under "Webinar Join Links" in the sidebar — it is deliberately kept off this document, because events must be published and anything on a published document is readable by the public.',
     }),
     defineField({
       name: "startsAt",

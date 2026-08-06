@@ -26,15 +26,26 @@ export interface EventItem {
    */
   registrationUrl?: string;
   /**
-   * The private join link (e.g. a Google Meet URL). NEVER expose this in public
-   * GROQ queries or client props — it is only returned by /api/register after a
-   * successful submission, so the link stays gated behind the form.
+   * The private join link (e.g. a Google Meet URL), for events still served from
+   * this hardcoded fallback only. NEVER expose it in public GROQ or client props
+   * — it is returned solely by /api/register after a successful submission.
+   *
+   * Sanity-managed events do NOT carry this field. Their links live on a
+   * never-published `eventJoinLink` document, because the dataset is public and
+   * an event has to be published to render, which would have made the link
+   * world-readable. See src/sanity/schemas/eventJoinLink.ts.
+   *
+   * Every module importing this file is a server component or route handler, so
+   * the value is tree-shaken out of the browser bundle — verified, but worth
+   * re-checking if any consumer ever gains a "use client" directive.
    */
   meetingLink?: string;
   /**
-   * Public boolean the events queries expose (via `defined(meetingLink)`) so the
-   * UI can tell a gated event apart from an open one without ever shipping the
-   * link itself.
+   * Public boolean telling the UI a gated event apart from an open one, without
+   * shipping the link. For Sanity events this comes from the explicit
+   * `usesBuiltInRegistration` toggle; it used to be derived from
+   * `defined(meetingLink)`, which stopped working once the link moved off the
+   * event document.
    */
   hasRegistration?: boolean;
   /** Exact start/end as ISO timestamps, used only to build calendar invites. */

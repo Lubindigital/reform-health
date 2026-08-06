@@ -1,10 +1,11 @@
 import type { StructureResolver } from "sanity/structure";
-import { CalendarDays, FileText, Home, Inbox, Users } from "lucide-react";
+import { CalendarDays, FileText, Home, Inbox, KeyRound, Users } from "lucide-react";
 
 // Custom Studio sidebar so dad sees a clean, organized list:
 //   Home Page (singleton — every section of the home page)
 //   Blog Posts
 //   Events
+//   Webinar Join Links (never published — see schemas/eventJoinLink.ts)
 //   Webinar Registrations
 //   Contact Submissions
 export const structure: StructureResolver = (S) =>
@@ -31,6 +32,12 @@ export const structure: StructureResolver = (S) =>
         .icon(CalendarDays)
         .schemaType("event")
         .child(S.documentTypeList("event").title("Events")),
+      S.divider(),
+      S.listItem()
+        .title("Webinar Join Links")
+        .icon(KeyRound)
+        .schemaType("eventJoinLink")
+        .child(S.documentTypeList("eventJoinLink").title("Webinar Join Links")),
       S.divider(),
       S.listItem()
         .title("Webinar Registrations")

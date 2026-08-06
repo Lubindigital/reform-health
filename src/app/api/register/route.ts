@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { draftMode } from "next/headers";
 import { createPrivateDocument } from "@/sanity/lib/writeClient";
-import { sanityFetch, EVENT_MEETING_QUERY } from "@/sanity/client";
+import { EVENT_MEETING_QUERY } from "@/sanity/client";
+import { privateFetch } from "@/sanity/lib/privateClient";
 import { findFallbackEvent, formatEventDate, type EventItem } from "@/data/events";
 import { buildICS, googleCalendarUrl } from "@/lib/ics";
 import { sendWebinarLinkEmail, sendRegistrationNotification } from "@/lib/email";
@@ -27,9 +28,16 @@ function clean(value: unknown, max = 200): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
-/** Look up the private meeting details server-side: Sanity first, then fallback. */
+/**
+ * Look up the private meeting details server-side: Sanity first, then fallback.
+ *
+ * Uses privateFetch, not the ordinary client. The join link lives on an
+ * eventJoinLink document that is never published — that is what keeps it off
+ * the public API — so reading it needs a token and the drafts perspective. The
+ * same query run anonymously returns meetingLink: null by design.
+ */
 async function getMeetingInfo(slug: string): Promise<MeetingInfo | null> {
-  const published = await sanityFetch<MeetingInfo>(EVENT_MEETING_QUERY, { slug });
+  const published = await privateFetch<MeetingInfo>(EVENT_MEETING_QUERY, { slug });
   if (published?.meetingLink) return published;
 
   const fallback: EventItem | undefined = findFallbackEvent(slug);

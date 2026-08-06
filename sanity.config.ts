@@ -36,6 +36,18 @@ const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore'])
 const SUBMISSION_TYPES = new Set(['contact', 'eventRegistration'])
 const SUBMISSION_ACTIONS = new Set<string>([])
 
+// Webinar join links must NEVER be published. The dataset is public, so a
+// published join link is readable by anyone with the project id, which defeats
+// the registration gate entirely. Sanity excludes drafts from unauthenticated
+// reads, so keeping these permanently in draft IS the access control — the
+// server reads them with a token in /api/register.
+//
+// An allowlist, so a future Sanity release adding a new publish-like action
+// cannot quietly open this up. Delete and discard stay available so old links
+// can be cleaned out.
+const NEVER_PUBLISH_TYPES = new Set(['eventJoinLink'])
+const NEVER_PUBLISH_ACTIONS = new Set(['delete', 'discardChanges'])
+
 export default defineConfig({
   basePath: '/studio',
   projectId,
@@ -55,6 +67,9 @@ export default defineConfig({
       }
       if (SUBMISSION_TYPES.has(context.schemaType)) {
         return prev.filter(({action}) => action && SUBMISSION_ACTIONS.has(action))
+      }
+      if (NEVER_PUBLISH_TYPES.has(context.schemaType)) {
+        return prev.filter(({action}) => action && NEVER_PUBLISH_ACTIONS.has(action))
       }
       return prev
     },

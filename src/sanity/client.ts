@@ -70,7 +70,7 @@ export const EVENTS_QUERY = `*[_type == "event"] | order(startDate asc) {
   description,
   isFree,
   registrationUrl,
-  "hasRegistration": defined(meetingLink),
+  "hasRegistration": usesBuiltInRegistration == true,
   host,
   speakers,
   "image": image.asset->url
@@ -92,12 +92,14 @@ export const EVENT_BY_SLUG_QUERY = `*[_type == "event" && slug.current == $slug]
   host
 }`;
 
-// SERVER-ONLY. Returns the private join link for a single event. Call this only
-// from the registration API route, never from a page or client component.
+// SERVER-ONLY, and it needs a token — the join link lives on an eventJoinLink
+// document that is never published, precisely so the public API cannot return
+// it. An anonymous client running this query gets meetingLink: null, which is
+// the whole point. Call it only from the registration API route.
 export const EVENT_MEETING_QUERY = `*[_type == "event" && slug.current == $slug][0] {
   title,
   "slug": slug.current,
-  "meetingLink": meetingLink,
+  "meetingLink": *[_type == "eventJoinLink" && event._ref == ^._id][0].meetingLink,
   startsAt,
   endsAt,
   timeLabel,
