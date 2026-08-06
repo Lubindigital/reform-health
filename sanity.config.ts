@@ -2,11 +2,13 @@
 
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
+import {presentationTool} from 'sanity/presentation'
 import {structureTool} from 'sanity/structure'
 
 import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schemaTypes} from './src/sanity/schemas'
 import {structure} from './src/sanity/structure'
+import {resolve} from './src/sanity/presentation/resolve'
 
 // Site Settings is a singleton: exactly one document, pinned to a known id by
 // src/sanity/structure.ts. Filtering `templates` below hides it from Create
@@ -60,6 +62,21 @@ export default defineConfig({
     askToEdit: {enabled: false},
   },
   plugins: [
+    // Split-screen editing: document on the left, live site on the right.
+    // `previewUrl.initial` is deliberately omitted — it defaults to
+    // location.origin, which is correct because the Studio is embedded in this
+    // same app at /studio. That also means it just works on localhost and on
+    // every Vercel preview URL without an env var per environment.
+    //
+    // Only `enable` is configured: `previewMode.disable` is marked
+    // not-implemented in Sanity and is never called, so the way out of draft
+    // mode is the /api/draft-mode/disable route linked from the site.
+    presentationTool({
+      previewUrl: {
+        previewMode: {enable: '/api/draft-mode/enable'},
+      },
+      resolve,
+    }),
     structureTool({structure}),
     visionTool({defaultApiVersion: apiVersion}),
   ],

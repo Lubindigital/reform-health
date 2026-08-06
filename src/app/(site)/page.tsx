@@ -11,11 +11,18 @@ import { Insights } from "@/components/sections/Insights";
 import { InTheNews } from "@/components/sections/InTheNews";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { Contact } from "@/components/sections/Contact";
-import { sanityFetch, SITE_SETTINGS_QUERY } from "@/sanity/client";
+import { SITE_SETTINGS_QUERY } from "@/sanity/client";
+import { draftAwareFetch } from "@/sanity/lib/live";
 
 // Re-fetch on every request so CMS edits show up immediately. The homepage is
 // cheap to render and content updates need to be visible the moment dad hits
 // Publish in Studio.
+//
+// Worth revisiting now that <SanityLive /> is mounted: Live Content is designed
+// to cache published pages and invalidate them precisely via sync tags, so
+// force-dynamic throws away the caching that makes it cheap. Left as-is for now
+// because it is the behaviour that has been in production, and changing caching
+// and adding visual editing in one step would make a regression hard to place.
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -30,7 +37,7 @@ interface SiteSettings {
 export default async function Home() {
   // Pull editable copy from Sanity. Falls back to component defaults if Sanity
   // is unreachable or the singleton hasn't been created yet.
-  const settings = (await sanityFetch<SiteSettings>(SITE_SETTINGS_QUERY)) ?? {};
+  const settings = (await draftAwareFetch<SiteSettings>(SITE_SETTINGS_QUERY)) ?? {};
 
   return (
     <>

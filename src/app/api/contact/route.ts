@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { draftMode } from "next/headers";
 import { createPrivateDocument } from "@/sanity/lib/writeClient";
 import { sendThankYouEmail, sendNotificationEmail } from "@/lib/email";
 import { verifyTurnstile, clientIp } from "@/lib/turnstile";
@@ -11,6 +12,13 @@ export async function POST(request: NextRequest) {
   if (typeof website === "string" && website.trim()) {
     console.warn(`[contact] honeypot triggered; dropping submission from ${email || "unknown"}`);
     return NextResponse.json({ success: true });
+  }
+
+  // Draft preview: the Presentation tool frames the real production site, so an
+  // editor testing this form would file a real lead in the CRM, POST to
+  // Formspree and email Michael. Return the success shape with no side effects.
+  if ((await draftMode()).isEnabled) {
+    return NextResponse.json({ success: true, preview: true });
   }
 
   // Bot check. Fails open until TURNSTILE_SECRET_KEY is configured.

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { draftMode } from "next/headers";
 import { createPrivateDocument } from "@/sanity/lib/writeClient";
 import { sanityFetch, EVENT_MEETING_QUERY } from "@/sanity/client";
 import { findFallbackEvent, formatEventDate, type EventItem } from "@/data/events";
@@ -67,6 +68,14 @@ export async function POST(request: NextRequest) {
   // Honeypot: real users never fill this hidden field.
   if (clean(body.website)) {
     return NextResponse.json({ success: true, meetingLink: null });
+  }
+
+  // Draft preview: the Presentation tool frames the real production site, so an
+  // editor clicking through this form to check a headline would create a real
+  // registration document and email a real join link to whatever they typed.
+  // Return the success shape without any side effects.
+  if ((await draftMode()).isEnabled) {
+    return NextResponse.json({ success: true, meetingLink: null, preview: true });
   }
 
   // Bot check. Fails open until TURNSTILE_SECRET_KEY is configured.
