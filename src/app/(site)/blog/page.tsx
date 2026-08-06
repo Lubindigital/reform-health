@@ -4,8 +4,16 @@ import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FadeUp } from "@/components/motion/FadeUp";
-import { sanityFetch, BLOG_POSTS_QUERY } from "@/sanity/client";
+import { BLOG_POSTS_QUERY } from "@/sanity/client";
+import { draftAwareFetch } from "@/sanity/lib/live";
 import { blogPosts as fallbackPosts } from "@/data/blog";
+
+// This page was prerendered once at build time with no revalidation path, so
+// publishing a post in Studio changed nothing on the live site until the next
+// deploy — silently, with no error. Fetching through draftAwareFetch attaches
+// sync tags that the mounted <SanityLive /> can invalidate, and the timer is a
+// backstop in case no live event arrives.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Insights | ReForm Health Alliance",
@@ -47,7 +55,7 @@ interface ListedPost {
  * instead of a cliff.
  */
 async function getPosts(): Promise<ListedPost[]> {
-  const posts = await sanityFetch<SanityPost[]>(BLOG_POSTS_QUERY);
+  const posts = await draftAwareFetch<SanityPost[]>(BLOG_POSTS_QUERY);
 
   const fromSanity: ListedPost[] = (posts ?? [])
     .filter((p) => p?.slug)

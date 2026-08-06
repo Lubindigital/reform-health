@@ -1,5 +1,5 @@
 import type { StructureResolver } from "sanity/structure";
-import { CalendarDays, Cog, FileText, Home, Inbox, Users } from "lucide-react";
+import { CalendarDays, FileText, Home, Inbox, Users } from "lucide-react";
 
 // Custom Studio sidebar so dad sees a clean, organized list:
 //   Site Settings (singleton — edits the whole site at once)
@@ -18,15 +18,6 @@ export const structure: StructureResolver = (S) =>
           S.document()
             .schemaType("homePage")
             .documentId("homePage"),
-        ),
-      S.divider(),
-      S.listItem()
-        .title("Site Settings")
-        .icon(Cog)
-        .child(
-          S.document()
-            .schemaType("siteSettings")
-            .documentId("siteSettings"),
         ),
       S.divider(),
       S.listItem()

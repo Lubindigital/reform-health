@@ -153,12 +153,12 @@ export const HOME_PAGE_QUERY = `*[_type == "homePage"][0] {
   "ctaImageAlt": ctaImage.alt
 }`;
 
-export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
-  heroHeadline,
-  heroDescription,
-  rotatingWords,
-  contactPhone,
-  contactLocation,
-  ctaHeadline,
-  ctaDescription
-}`;
+// SITE_SETTINGS_QUERY and the siteSettings type were removed after the P3
+// migration. Their hero and CTA fields moved to homePage, which left seven
+// editable-looking fields in the Studio wired to nothing — the same dead-field
+// trap this project already had with contactPhone/contactLocation. The
+// underlying document still exists in the dataset but is no longer part of the
+// schema, so it is invisible in the Studio and safe to delete later.
+//
+// Contact details (phone, location) remain hardcoded in src/lib/constants.ts.
+// Give them a real home before adding them back to the Studio.

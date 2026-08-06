@@ -4,12 +4,17 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 import { sanityFetch, BLOG_POST_QUERY, BLOG_POSTS_QUERY } from "@/sanity/client";
+import { draftAwareFetch } from "@/sanity/lib/live";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ShareButtons } from "@/components/shared/ShareButtons";
 
 // Fallback content for when Sanity isn't set up yet
 import { blogPostContent } from "@/data/blogContent";
+
+// Same reason as the listing page: without this the article is prerendered once
+// and republishing in Studio never reaches the live site.
+export const revalidate = 300;
 
 interface BlogPost {
   _id: string;
@@ -96,13 +101,12 @@ const portableTextComponents = {
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  // Try Sanity first
-  let post: BlogPost | null = null;
-  try {
-    post = await sanityFetch<BlogPost>(BLOG_POST_QUERY, { slug });
-  } catch {
-    // Sanity not configured
-  }
+  // draftAwareFetch, so the article is previewable in Presentation and its sync
+  // tags let <SanityLive /> revalidate this page when the post is republished.
+  // generateMetadata and generateStaticParams deliberately stay on the plain
+  // client: stega would put invisible characters into <title> and the meta
+  // description, which look fine in a browser tab and corrupt search results.
+  const post = await draftAwareFetch<BlogPost>(BLOG_POST_QUERY, { slug });
 
   // Fallback to static content
   const fallback = blogPostContent[slug];

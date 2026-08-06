@@ -6,9 +6,10 @@ import type { PresentationPluginOptions } from "sanity/presentation";
  *
  * `locations` powers the "Used on" panel — open a document and see where it
  * actually renders. That panel is also the cheapest way to catch a field that
- * has no consumer, which this Studio has had before: siteSettings.contactPhone
- * and contactLocation sat in the schema and the query for months while the site
- * read a hardcoded constant, so editing them changed nothing.
+ * has no consumer. This Studio has done that twice now: siteSettings.contactPhone
+ * and contactLocation sat in the schema for months while the site read a
+ * hardcoded constant, and then the P3 migration to homePage orphaned five more
+ * fields while this very file kept pointing "/" at the dead document.
  *
  * `mainDocuments` is the reverse — it maps a URL in the preview iframe back to
  * the document to open in the editor.
@@ -22,8 +23,8 @@ import type { PresentationPluginOptions } from "sanity/presentation";
 // copied from a tutorial would point at a 404.
 export const resolve: PresentationPluginOptions["resolve"] = {
   locations: {
-    siteSettings: defineLocations({
-      message: "Used across the home page",
+    homePage: defineLocations({
+      message: "Every section of the home page",
       tone: "positive",
       locations: [{ title: "Home page", href: "/" }],
     }),
@@ -68,7 +69,7 @@ export const resolve: PresentationPluginOptions["resolve"] = {
     },
     {
       route: "/",
-      filter: `_type == "siteSettings"`,
+      filter: `_type == "homePage"`,
     },
   ]),
 };

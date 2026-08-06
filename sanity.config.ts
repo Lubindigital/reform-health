@@ -16,7 +16,7 @@ import {resolve} from './src/sanity/presentation/resolve'
 // Actions menu. Duplicate was the dangerous one — it mints a second settings
 // document with a random id while the structure and the GROQ query keep reading
 // the original, so you'd be editing a ghost with no feedback.
-const SINGLETON_TYPES = new Set(['siteSettings', 'homePage'])
+const SINGLETON_TYPES = new Set(['homePage'])
 const SINGLETON_ACTIONS = new Set(['publish', 'discardChanges', 'restore'])
 
 // Form submissions. Written by the API routes, never by hand, and they sit in

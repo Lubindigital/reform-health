@@ -15,7 +15,23 @@ export async function GET(request: Request) {
   const draft = await draftMode();
   draft.disable();
 
-  const returnTo = new URL(request.url).searchParams.get("returnTo") || "/";
-  // Only allow same-site paths, so this can't be used as an open redirect.
-  redirect(returnTo.startsWith("/") ? returnTo : "/");
+  // Resolve the requested path against this origin and compare origins, rather
+  // than prefix-matching on "/". A startsWith("/") check looks right and is not:
+  // `//evil.example.com` and `/\evil.example.com` both begin with a slash and
+  // both are treated by browsers as protocol-relative absolute URLs, which made
+  // this an open redirect on a domain used for outreach to employers.
+  const here = new URL(request.url);
+  const requested = here.searchParams.get("returnTo") || "/";
+
+  let target = "/";
+  try {
+    const resolved = new URL(requested, here);
+    if (resolved.origin === here.origin) {
+      target = resolved.pathname + resolved.search + resolved.hash;
+    }
+  } catch {
+    // Unparseable input falls through to "/".
+  }
+
+  redirect(target);
 }

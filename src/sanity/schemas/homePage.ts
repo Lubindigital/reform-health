@@ -278,6 +278,10 @@ export const homePage = defineType({
       title: "Initiative cards",
       type: "array",
       group: "initiatives",
+      // Cannot be emptied. An empty array falls through to the hardcoded launch
+      // copy in src/data/initiatives.ts, so deleting the last card would
+      // republish six old cards instead of clearing the section.
+      validation: (rule) => rule.min(1),
       of: [
         defineArrayMember({
           type: "object",
@@ -325,6 +329,8 @@ export const homePage = defineType({
       type: "array",
       group: "membership",
       description: "Each one gets a checkmark. Listed in this order.",
+      // Same reason as initiatives: emptying it resurrects the hardcoded list.
+      validation: (rule) => rule.min(1),
       of: [
         defineArrayMember({
           type: "object",
