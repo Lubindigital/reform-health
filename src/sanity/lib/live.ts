@@ -10,18 +10,27 @@ import { client } from "./client";
  * field that produced it. `<SanityLive />` opens the event stream that keeps
  * both cases fresh.
  *
- * `browserToken` is deliberately `false`. It would hand a Viewer token to the
- * browser during draft mode, and a Viewer token can run arbitrary GROQ across
- * the whole dataset — including the `drafts.*` documents where every contact
- * and webinar registration now lives (see writeClient.ts). Sanity tokens have
- * no per-document scoping, so there is no safe way to share one here. The cost
- * is that standalone draft preview in a plain tab does not live-update; preview
- * inside the Presentation tool works, because that path uses `serverToken`.
+ * `browserToken` is required, not optional, and it was a mistake to omit it.
+ * `<SanityLive>`'s `includeDrafts` only defaults to true when a `browserToken`
+ * is configured; without one the live connection subscribes to published events
+ * ONLY, so editing a draft fires nothing and the Presentation preview never
+ * refreshes. That is the whole feature.
+ *
+ * It was left out over a concern that a browser-exposed Viewer token can run
+ * arbitrary GROQ across the dataset, including the `drafts.*` documents holding
+ * contact and registration PII (see writeClient.ts). That concern does not hold
+ * up: the token is only handed to the browser once draft mode is active, draft
+ * mode can only be entered through /api/draft-mode/enable with a one-time
+ * secret, and minting that secret requires an authenticated Studio session. So
+ * the only people who can obtain this token are project members who can already
+ * read every document directly in the Studio. It grants them nothing new.
+ *
+ * It must stay a Viewer token. A write token here would be a genuine escalation.
  */
 export const { sanityFetch: liveFetch, SanityLive } = defineLive({
   client,
   serverToken: process.env.SANITY_API_READ_TOKEN,
-  browserToken: false,
+  browserToken: process.env.SANITY_API_READ_TOKEN,
 });
 
 /**
