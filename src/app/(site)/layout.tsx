@@ -7,6 +7,8 @@ import { DraftModeBanner } from "@/components/shared/DraftModeBanner";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThirdPartyAnalytics } from "@/components/analytics/ThirdPartyAnalytics";
+import { CONTACT, SOCIAL_LINKS } from "@/lib/constants";
+import { SITE_URL, SITE_NAME, OG_IMAGE, HOME_SHARE, pageOpenGraph, pageTwitter } from "@/lib/seo";
 import "../globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -22,6 +24,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  // Every relative URL in metadata (canonicals, OG image) resolves against this,
+  // so pages can declare `alternates.canonical: "/blog"` and get the full URL.
+  metadataBase: new URL(SITE_URL),
   title: "ReForm Health Alliance | Nevada Employer Coalition for Better Healthcare",
   description:
     "ReForm Health Alliance is a collective of leading Nevada organizations disrupting the health insurance status quo to deliver better care and benefits at sustainably lower costs.",
@@ -32,14 +37,43 @@ export const metadata: Metadata = {
     "high performing health plans",
     "healthcare costs Reno NV",
   ],
-  robots: { index: true, follow: true },
-  alternates: { canonical: "https://www.reformnv.org/" },
-  openGraph: {
-    title: "ReForm Health Alliance | Better Care. Lower Costs. Stronger Communities.",
-    description: "A collective of leading Nevada organizations disrupting the health insurance status quo.",
-    type: "website",
-    locale: "en_US",
-  },
+  robots: { index: true, follow: true, "max-image-preview": "large" },
+  // No site-wide canonical here: a canonical set in the root layout is inherited
+  // by every page, which made /blog and each post declare the homepage as their
+  // canonical URL. Each page sets its own `alternates.canonical` instead.
+  openGraph: pageOpenGraph({ ...HOME_SHARE, path: "/" }),
+  twitter: pageTwitter(HOME_SHARE),
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: `${SITE_URL}/`,
+      logo: `${SITE_URL}/logo.png`,
+      image: `${SITE_URL}${OG_IMAGE.url}`,
+      description:
+        "A collective of leading Nevada organizations disrupting the health insurance status quo to deliver better care and benefits at sustainably lower costs.",
+      telephone: CONTACT.phone,
+      address: { "@type": "PostalAddress", addressLocality: "Reno", addressRegion: "NV", addressCountry: "US" },
+      areaServed: { "@type": "State", name: "Nevada" },
+      sameAs: SOCIAL_LINKS.map((l) => l.href),
+      contactPoint: [
+        { "@type": "ContactPoint", contactType: "customer service", telephone: CONTACT.phone, areaServed: "US", availableLanguage: "English" },
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: `${SITE_URL}/`,
+      name: SITE_NAME,
+      inLanguage: "en-US",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  ],
 };
 
 export default async function RootLayout({
@@ -58,15 +92,7 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "ReForm Health Alliance",
-              description: "Nevada employer coalition disrupting the health insurance status quo",
-              telephone: "775-636-5005",
-              url: "https://www.reformnv.org",
-              address: { "@type": "PostalAddress", addressLocality: "Reno", addressRegion: "NV", addressCountry: "US" },
-            }),
+            __html: JSON.stringify(structuredData),
           }}
         />
       </head>

@@ -10,19 +10,22 @@ import {
 } from "@/components/events/EventCard";
 import { sanityFetch, EVENTS_QUERY } from "@/sanity/client";
 import { mergeEvents, isUpcoming, type EventItem } from "@/data/events";
+import { pageOpenGraph, pageTwitter } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Events | ReForm Health Alliance",
   description:
     "Free webinars and live sessions from the ReForm Health Alliance, showing Nevada employers how to cut healthcare costs without cutting benefits.",
   alternates: { canonical: "https://www.reformnv.org/events" },
-  openGraph: {
+  openGraph: pageOpenGraph({
     title: "Events | ReForm Health Alliance",
-    description:
-      "Free webinars and live sessions from the ReForm Health Alliance for Nevada employers.",
-    url: "https://www.reformnv.org/events",
-    type: "website",
-  },
+    description: "Free webinars and live sessions from the ReForm Health Alliance for Nevada employers.",
+    path: "/events",
+  }),
+  twitter: pageTwitter({
+    title: "Events | ReForm Health Alliance",
+    description: "Free webinars and live sessions from the ReForm Health Alliance for Nevada employers.",
+  }),
 };
 
 // Events are time-sensitive, so render fresh on every request rather than

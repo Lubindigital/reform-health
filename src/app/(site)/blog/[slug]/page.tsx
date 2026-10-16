@@ -11,6 +11,7 @@ import { ShareButtons } from "@/components/shared/ShareButtons";
 
 // Fallback content for when Sanity isn't set up yet
 import { blogPostContent } from "@/data/blogContent";
+import { pageOpenGraph, pageTwitter } from "@/lib/seo";
 
 // Same reason as the listing page: without this the article is prerendered once
 // and republishing in Studio never reaches the live site.
@@ -61,6 +62,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       return {
         title: `${post.title} | ReForm Health Alliance`,
         description: post.excerpt,
+        alternates: { canonical: `/blog/${slug}` },
+        openGraph: pageOpenGraph({ title: post.title, description: post.excerpt, path: `/blog/${slug}`, type: "article" }),
+        twitter: pageTwitter({ title: post.title, description: post.excerpt }),
       };
     }
   } catch {
@@ -70,7 +74,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // Fallback
   const fallback = blogPostContent[slug];
   if (fallback) {
-    return { title: `${fallback.title} | ReForm Health Alliance`, description: fallback.excerpt };
+    return {
+      title: `${fallback.title} | ReForm Health Alliance`,
+      description: fallback.excerpt,
+      alternates: { canonical: `/blog/${slug}` },
+      openGraph: pageOpenGraph({ title: fallback.title, description: fallback.excerpt, path: `/blog/${slug}`, type: "article" }),
+      twitter: pageTwitter({ title: fallback.title, description: fallback.excerpt }),
+    };
   }
   return { title: "Blog | ReForm Health Alliance" };
 }

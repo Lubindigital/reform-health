@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
@@ -14,6 +15,13 @@ import { Contact } from "@/components/sections/Contact";
 import { HOME_PAGE_QUERY } from "@/sanity/client";
 import { draftAwareFetch } from "@/sanity/lib/live";
 import type { HomePage } from "@/sanity/homePageTypes";
+import { HOME_SHARE, pageOpenGraph } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  // Absolute on purpose: a relative "/" resolves without the trailing slash.
+  alternates: { canonical: "https://www.reformnv.org/" },
+  openGraph: pageOpenGraph({ ...HOME_SHARE, path: "/" }),
+};
 
 // Re-fetch on every request so CMS edits show up immediately. The homepage is
 // cheap to render and content updates need to be visible the moment dad hits

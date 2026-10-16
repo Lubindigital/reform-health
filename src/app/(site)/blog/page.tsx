@@ -7,6 +7,7 @@ import { FadeUp } from "@/components/motion/FadeUp";
 import { BLOG_POSTS_QUERY } from "@/sanity/client";
 import { draftAwareFetch } from "@/sanity/lib/live";
 import { blogPosts as fallbackPosts } from "@/data/blog";
+import { pageOpenGraph, pageTwitter } from "@/lib/seo";
 
 // This page was prerendered once at build time with no revalidation path, so
 // publishing a post in Studio changed nothing on the live site until the next
@@ -18,6 +19,16 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Insights | ReForm Health Alliance",
   description: "Insights, analysis, and thought leadership from the ReForm Health Alliance on employer healthcare strategy in Nevada.",
+  alternates: { canonical: "/blog" },
+  openGraph: pageOpenGraph({
+    title: "Insights | ReForm Health Alliance",
+    description: "Insights, analysis, and thought leadership from the ReForm Health Alliance on employer healthcare strategy in Nevada.",
+    path: "/blog",
+  }),
+  twitter: pageTwitter({
+    title: "Insights | ReForm Health Alliance",
+    description: "Insights, analysis, and thought leadership from the ReForm Health Alliance on employer healthcare strategy in Nevada.",
+  }),
 };
 
 interface SanityPost {

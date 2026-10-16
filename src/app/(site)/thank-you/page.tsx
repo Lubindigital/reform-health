@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
   title: "Thank You | ReForm Health Alliance",
+  robots: { index: false, follow: true },
 };
 
 export default function ThankYouPage() {
