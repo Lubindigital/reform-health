@@ -1,0 +1,8 @@
+[http_service]
+  internal_port = 8080
+
+  [[http_service.checks]]
+    path = "/"
+    interval = "30s"
+    timeout = "10s"
+    grace_period = "30s"
