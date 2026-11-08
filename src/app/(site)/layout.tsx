@@ -4,8 +4,6 @@ import { Space_Grotesk, Instrument_Sans } from "next/font/google";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { SanityLive } from "@/sanity/lib/live";
 import { DraftModeBanner } from "@/components/shared/DraftModeBanner";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThirdPartyAnalytics } from "@/components/analytics/ThirdPartyAnalytics";
 import { CONTACT, SOCIAL_LINKS } from "@/lib/constants";
 import { SITE_URL, SITE_NAME, OG_IMAGE, HOME_SHARE, pageOpenGraph, pageTwitter } from "@/lib/seo";
@@ -107,8 +105,6 @@ export default async function RootLayout({
         */}
         {!isDraftMode && (
           <>
-            <Analytics />
-            <SpeedInsights />
             <ThirdPartyAnalytics />
           </>
         )}
